@@ -33,7 +33,7 @@
 
 <table>
 <tr>
-<td width="10%">
+<td width="50%">
 
 ### 💰 Account Management
 - 📊 Savings & Current Accounts
@@ -43,7 +43,7 @@
 - 📥 Download Statements (CSV/Excel)
 
 </td>
-<td width="100%">
+<td width="50%">
 
 ### 💳 Loans & Credit
 - 🏠 Home Loans
@@ -55,7 +55,7 @@
 </td>
 </tr>
 <tr>
-<td width="100%">
+<td width="50%">
 
 ### 📈 Investments
 - 🏦 Fixed Deposits (FD)
@@ -65,7 +65,7 @@
 - 📧 Investment Notifications
 
 </td>
-<td width="100%">
+<td width="50%">
 
 ### 🔐 Security & More
 - 🔒 Two-Factor Authentication (2FA)
