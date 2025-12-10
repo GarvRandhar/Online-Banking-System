@@ -86,57 +86,57 @@
 <tr>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/7d84f2f8-9277-4b6a-a2d0-16b3c56b0505" alt="Home Page" style="width:100%">
-<p align="center"><em>🏠 Home Page</em></p>
+<p align="center"><em</em></p>
 </td>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/07dcf386-6a90-4f06-86ad-69a0be3d5c8c" alt="Login" style="width:100%">
-<p align="center"><em>🔐 Login</em></p>
+<p align="center"><em></em></p>
 </td>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/b03c419d-f446-4364-9d77-0c82e92dd08f" alt="Signup" style="width:100%">
-<p align="center"><em>📝 Signup</em></p>
+<p align="center"><em></em></p>
 </td>
 </tr>
 <tr>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/7e0395bb-1eb8-418f-87fe-16baf0c35996" alt="Dashboard" style="width:100%">
-<p align="center"><em>📊 Dashboard</em></p>
+<p align="center"><em></em></p>
 </td>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/5e70f949-bc89-4401-afe7-faf215dce554" alt="Transactions" style="width:100%">
-<p align="center"><em>💸 Transactions</em></p>
+<p align="center"><em></em></p>
 </td>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/4490ffbf-bee6-4b86-a94e-5d0255e81227" alt="Transfer Money" style="width:100%">
-<p align="center"><em>💰 Transfer Money</em></p>
+<p align="center"><em></em></p>
 </td>
 </tr>
 <tr>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/5e68f282-1615-4962-851e-f834a4b75871" alt="Loans" style="width:100%">
-<p align="center"><em>🏦 Loans</em></p>
+<p align="center"><em></em></p>
 </td>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/22b25186-8cc0-4e47-b1df-453eb0536903" alt="Credit Cards" style="width:100%">
-<p align="center"><em>💳 Credit Cards</em></p>
+<p align="center"><em></em></p>
 </td>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/a8098bcf-d97b-40c5-bd4c-1abbe846d6ce" alt="Investments" style="width:100%">
-<p align="center"><em>📈 Investments</em></p>
+<p align="center"><em></em></p>
 </td>
 </tr>
 <tr>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/8c119526-680a-4185-ab56-91f4a01cb3fe" alt="Fixed Deposit" style="width:100%">
-<p align="center"><em>🔒 Fixed Deposit</em></p>
+<p align="center"><em></em></p>
 </td>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/2fffb655-8891-458a-a7fa-6a4e40d06139" alt="Recurring Deposit" style="width:100%">
-<p align="center"><em>🔄 Recurring Deposit</em></p>
+<p align="center"><em></em></p>
 </td>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/c3809e66-78b6-4a56-9c07-554244826221" alt="2FA Security" style="width:100%">
-<p align="center"><em>🔐 2FA Security</em></p>
+<p align="center"><em></em></p>
 </td>
 </tr>
 </table>
