@@ -33,7 +33,7 @@
 
 <table>
 <tr>
-<td width="50%">
+<td width="1000%">
 
 ### 💰 Account Management
 - 📊 Savings & Current Accounts
@@ -43,7 +43,7 @@
 - 📥 Download Statements (CSV/Excel)
 
 </td>
-<td width="50%">
+<td width="100%">
 
 ### 💳 Loans & Credit
 - 🏠 Home Loans
