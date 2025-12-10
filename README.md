@@ -33,7 +33,7 @@
 
 <table>
 <tr>
-<td width="1000%">
+<td width="100%">
 
 ### 💰 Account Management
 - 📊 Savings & Current Accounts
