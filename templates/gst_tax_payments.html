@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GST/Tax Payments</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+
+    {% block title %}GST & Tax Payments | SecureBank Pro{% endblock %}
+
+    {% block content %}
+    <div class="container">
+      <div class="page-header text-center animate__animated animate__fadeInDown">
+        <h1 class="page-title">GST & Tax Payments</h1>
+        <p class="page-subtitle">Streamline your business tax payments with ease</p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-xl-8">
+          <!-- Quick Stats -->
+          <div class="row mb-5">
+            <div class="col-md-4 mb-3">
+              <div class="metric-card">
+                <span class="metric-value">₹0</span>
+                <span class="metric-label">This Month</span>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="metric-card" style="background: linear-gradient(135deg, var(--success) 0%, #34d399 100%);">
+                <span class="metric-value">₹0</span>
+                <span class="metric-label">This Quarter</span>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="metric-card" style="background: linear-gradient(135deg, var(--warning) 0%, #fbbf24 100%);">
+                <span class="metric-value">₹0</span>
+                <span class="metric-label">This Year</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Form -->
+          <div class="card border-0 shadow-lg animate__animated animate__fadeInUp">
+            <div class="card-body p-5">
+              <!-- Header -->
+              <div class="text-center mb-4">
+                <div class="business-icon mx-auto mb-3">
+                  <i class="fas fa-receipt"></i>
+                </div>
+                <h3 class="h4 mb-2">Make GST/Tax Payment</h3>
+                <p class="text-muted">Secure and instant tax payment processing</p>
+              </div>
+
+              <form method="POST" id="gstPaymentForm" class="payment-form-container">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                
+                <!-- Payment Type Selection -->
+                <div class="mb-4">
+                  <label class="form-label fw-semibold">Payment Type</label>
+                  <div class="row g-2">
+                    <div class="col-md-6">
+                      <div class="form-check form-check-inline w-100">
+                        <input class="form-check-input" type="radio" name="payment_type" id="gst" value="GST" checked>
+                        <label class="form-check-label w-100 p-3 border rounded text-center" for="gst">
+                          <i class="fas fa-file-invoice-dollar d-block mb-2"></i>
+                          <strong>GST Payment</strong>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-check form-check-inline w-100">
+                        <input class="form-check-input" type="radio" name="payment_type" id="tax" value="TAX">
+                        <label class="form-check-label w-100 p-3 border rounded text-center" for="tax">
+                          <i class="fas fa-coins d-block mb-2"></i>
+                          <strong>Income Tax</strong>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Amount Input -->
+                <div class="mb-4">
+                  <label for="gst_amount" class="form-label fw-semibold">Payment Amount</label>
+                  <div class="amount-input-group">
+                    <span class="currency-symbol">₹</span>
+                    <input type="number" name="gst_amount" id="gst_amount" 
+                           class="form-control form-control-lg amount-input" 
+                           placeholder="Enter amount" min="1" required>
+                  </div>
+                  
+                  <!-- Quick Amount Buttons -->
+                  <div class="quick-amounts">
+                    <button type="button" class="quick-amount-btn" data-amount="5000">₹5,000</button>
+                    <button type="button" class="quick-amount-btn" data-amount="10000">₹10,000</button>
+                    <button type="button" class="quick-amount-btn" data-amount="25000">₹25,000</button>
+                    <button type="button" class="quick-amount-btn" data-amount="50000">₹50,000</button>
+                    <button type="button" class="quick-amount-btn" data-amount="100000">₹1,00,000</button>
+                  </div>
+                </div>
+
+                <!-- Payment Description -->
+                <div class="mb-4">
+                  <label for="description" class="form-label fw-semibold">Description (Optional)</label>
+                  <textarea name="description" id="description" class="form-control" rows="3" 
+                            placeholder="Add payment description or reference number"></textarea>
+                </div>
+
+                <!-- Payment Button -->
+                <div class="d-grid gap-2 mb-3">
+                  <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-credit-card me-2"></i>Process Payment
+                  </button>
+                </div>
+              </form>
+
+              <!-- Security Notice -->
+              <div class="alert alert-modern alert-info mt-4">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-shield-alt me-3"></i>
+                  <div>
+                    <strong>Secure Payment Processing</strong><br>
+                    <small>All tax payments are processed securely and instantly credited to government accounts.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Payments -->
+          <div class="card border-0 shadow-sm mt-4 animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="card-header bg-transparent">
+              <h5 class="mb-0">
+                <i class="fas fa-history me-2 text-primary"></i>Recent Tax Payments
+              </h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="text-center py-5 text-muted">
+                <i class="fas fa-receipt fa-3x mb-3 opacity-50"></i>
+                <p class="mb-0">No recent tax payments found</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Back Link -->
+          <div class="text-center mt-4">
+            <a href="{{ url_for('current_account_dashboard') }}" class="text-decoration-none">
+              <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Quick amount button functionality
+      document.querySelectorAll('.quick-amount-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const amount = this.getAttribute('data-amount');
+          document.getElementById('gst_amount').value = amount;
+          
+          // Update active state
+          document.querySelectorAll('.quick-amount-btn').forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Form validation
+      document.getElementById('gstPaymentForm').addEventListener('submit', function(event) {
+        const amount = document.getElementById('gst_amount').value;
+        
+        if (!amount || parseFloat(amount) <= 0) {
+          event.preventDefault();
+          alert('Please enter a valid payment amount');
+          return false;
+        }
+        
+        return true;
+      });
+
+      // Payment type selection styling
+      document.querySelectorAll('input[name="payment_type"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          document.querySelectorAll('label[for="gst"], label[for="tax"]').forEach(label => {
+            label.classList.remove('border-primary', 'bg-primary', 'text-white');
+            label.classList.add('border');
+          });
+          
+          const selectedLabel = document.querySelector(`label[for="${this.value.toLowerCase()}"]`);
+          if (selectedLabel) {
+            selectedLabel.classList.add('border-primary', 'bg-primary', 'text-white');
+            selectedLabel.classList.remove('border');
+          }
+        });
+      });
+
+      // Initialize first option as selected
+      document.querySelector('label[for="gst"]').classList.add('border-primary', 'bg-primary', 'text-white');
+    </script>
+    {% endblock %}
+</body>
+</html>

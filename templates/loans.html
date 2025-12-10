@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Loans - YourBank{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Loan Services</h2>
+    
+    <div class="row">
+        <!-- Personal Loan -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Personal Loan</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="text-success">Up to ₹35 Lakhs</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success"></i> Interest Rate: 12% p.a.</li>
+                        <li><i class="fas fa-check text-success"></i> No Security Required</li>
+                        <li><i class="fas fa-check text-success"></i> No Guarantor</li>
+                        <li><i class="fas fa-check text-success"></i> Processing Fee: 2%</li>
+                        <li><i class="fas fa-check text-success"></i> Zero Hidden Costs</li>
+                    </ul>
+                    <h6 class="mt-3">Eligibility:</h6>
+                    <ul class="small">
+                        <li>Government/Defence: Min ₹20,000 salary</li>
+                        <li>Corporate: Min ₹25,000 salary</li>
+                        <li>Indian Nationality</li>
+                        <li>Decent Credit Score</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('apply_loan', loan_type='personal') }}" class="btn btn-primary btn-block">Apply Now</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Home Loan -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Home Loan</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="text-success">Up to ₹2 Crores</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success"></i> Interest Rate: 8% p.a.</li>
+                        <li><i class="fas fa-check text-success"></i> Tenure: Up to 30 years</li>
+                        <li><i class="fas fa-check text-success"></i> Processing Fee: 1%</li>
+                        <li><i class="fas fa-check text-success"></i> No Hidden Charges</li>
+                    </ul>
+                    <h6 class="mt-3">Eligibility:</h6>
+                    <ul class="small">
+                        <li>Age: 18-70 years</li>
+                        <li>Resident Indian & NRI</li>
+                        <li>Income based on loan amount</li>
+                        <li>Property documentation required</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('apply_loan', loan_type='home') }}" class="btn btn-success btn-block">Apply Now</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Loan -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">Business Loan</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="text-success">Up to ₹50 Lakhs</h6>
+                    <p class="small text-muted">(₹2 Crores for Premium Current Account holders)</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success"></i> Interest Rate: 11% p.a.</li>
+                        <li><i class="fas fa-check text-success"></i> Processing Fee: 1.5%</li>
+                        <li><i class="fas fa-check text-success"></i> No Hidden Charges</li>
+                    </ul>
+                    <h6 class="mt-3">Eligibility:</h6>
+                    <ul class="small">
+                        <li>Age: 21-65 years</li>
+                        <li>Self-employed/Business owners</li>
+                        <li>Min Annual Income: ₹1.5 Lakhs</li>
+                        <li>Min Turnover: ₹40 Lakhs</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('apply_loan', loan_type='business') }}" class="btn btn-warning btn-block">Apply Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5>Track Your Loan Applications</h5>
+                    <p>View the status of your loan applications and manage your existing loans.</p>
+                    <a href="{{ url_for('my_loans') }}" class="btn btn-info">My Loans</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

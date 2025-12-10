@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Verify 2FA{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">Verify Your Identity</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> 
+                        <strong>Two-Factor Authentication Required</strong>
+                        <p class="mb-0 mt-2">Enter the 6-digit code from your authenticator app to continue.</p>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('verify_2fa') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        
+                        <div class="mb-4">
+                            <label for="otp_code" class="form-label">Enter 6-Digit Code</label>
+                            <input type="text" class="form-control form-control-lg text-center" 
+                                   id="otp_code" name="otp_code" maxlength="6" 
+                                   pattern="[0-9]{6}" placeholder="000000" required 
+                                   inputmode="numeric" autocomplete="off" autofocus>
+                            <small class="text-muted d-block mt-2">Look for the code in your authenticator app</small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Verify</button>
+                            <a href="{{ url_for('login') }}" class="btn btn-link">Back to Login</a>
+                        </div>
+                    </form>
+
+                    <div class="alert alert-warning mt-4" role="alert">
+                        <small>
+                            <strong>Lost your authenticator?</strong><br>
+                            Contact our support team at support@yourbank.com or call 1800-XXXX-XXXX
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

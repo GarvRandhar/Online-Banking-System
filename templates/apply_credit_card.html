@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply for Credit Card - YourBank{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">💳 Apply for Credit Card</h4>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'error' else 'success' if category == 'success' else 'info' }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h5 class="mb-3">Choose Your Card Type</h5>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-primary h-100">
+                                <div class="card-header bg-light">
+                                    <h5 class="card-title mb-0">⭐ Standard Card</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Credit Limit</h6>
+                                        <p class="display-6 mb-0">₹1,00,000</p>
+                                    </div>
+                                    
+                                    <h6 class="mb-2">Benefits:</h6>
+                                    <ul class="list-unstyled small">
+                                        <li><i class="fas fa-check text-success"></i> 1% Cashback on all spends</li>
+                                        <li><i class="fas fa-check text-success"></i> Reward Points (1 point per ₹100)</li>
+                                        <li><i class="fas fa-check text-success"></i> Free EMI options</li>
+                                        <li><i class="fas fa-check text-success"></i> Free airport lounge access (2 times/year)</li>
+                                        <li><i class="fas fa-check text-success"></i> 0% interest on bill payments</li>
+                                    </ul>
+                                    
+                                    <hr>
+                                    <h6 class="mb-2">Eligibility Requirements:</h6>
+                                    <ul class="list-unstyled small">
+                                        <li><i class="fas fa-circle text-warning"></i> Age: 21-60 years</li>
+                                        <li><i class="fas fa-circle text-warning"></i> Minimum Annual Income: ₹3,00,000</li>
+                                        <li><i class="fas fa-circle text-warning"></i> Minimum Account Balance: ₹50,000</li>
+                                        <li><i class="fas fa-circle text-warning"></i> CIBIL Score: 700+</li>
+                                        <li><i class="fas fa-circle text-warning"></i> Employment: Salaried/Self-employed</li>
+                                    </ul>
+                                    
+                                    <hr>
+                                    <p class="small text-muted"><strong>Annual Fee:</strong> ₹500 (Waived on 1+ transactions)</p>
+                                    
+                                    <button type="button" class="btn btn-primary btn-block w-100" onclick="selectCard('standard')">
+                                        Select This Card
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-warning h-100">
+                                <div class="card-header bg-light border-warning">
+                                    <h5 class="card-title mb-0">⭐⭐ Gold Card</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <h6 class="text-warning">Credit Limit</h6>
+                                        <p class="display-6 mb-0">₹5,00,000</p>
+                                    </div>
+                                    
+                                    <h6 class="mb-2">Benefits:</h6>
+                                    <ul class="list-unstyled small">
+                                        <li><i class="fas fa-check text-success"></i> 2% Cashback on all spends</li>
+                                        <li><i class="fas fa-check text-success"></i> Reward Points (2 points per ₹100)</li>
+                                        <li><i class="fas fa-check text-success"></i> Free airport lounge access (6 times/year)</li>
+                                        <li><i class="fas fa-check text-success"></i> Travel insurance coverage</li>
+                                        <li><i class="fas fa-check text-success"></i> Golf course privileges</li>
+                                        <li><i class="fas fa-check text-success"></i> Priority customer support</li>
+                                    </ul>
+                                    
+                                    <hr>
+                                    <h6 class="mb-2">Eligibility Requirements:</h6>
+                                    <ul class="list-unstyled small">
+                                        <li><i class="fas fa-circle text-warning"></i> Age: 23-65 years</li>
+                                        <li><i class="fas fa-circle text-warning"></i> Minimum Annual Income: ₹10,00,000</li>
+                                        <li><i class="fas fa-circle text-warning"></i> Minimum Account Balance: ₹2,00,000</li>
+                                        <li><i class="fas fa-circle text-warning"></i> CIBIL Score: 750+</li>
+                                        <li><i class="fas fa-circle text-warning"></i> Employment: Senior Manager/Director/Self-employed (High Income)</li>
+                                        <li><i class="fas fa-circle text-warning"></i> 5+ years banking relationship with us</li>
+                                    </ul>
+                                    
+                                    <hr>
+                                    <p class="small text-muted"><strong>Annual Fee:</strong> ₹2,500 (Waived on 3+ transactions)</p>
+                                    
+                                    <button type="button" class="btn btn-warning btn-block w-100" onclick="selectCard('gold')">
+                                        Select This Card
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-dark h-100">
+                                <div class="card-header bg-light border-dark">
+                                    <h5 class="card-title mb-0">⭐⭐⭐ Platinum Card</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <h6 class="text-dark">Credit Limit</h6>
+                                        <p class="display-6 mb-0">₹10,00,000</p>
+                                    </div>
+                                    
+                                    <h6 class="mb-2">Benefits:</h6>
+                                    <ul class="list-unstyled small">
+                                        <li><i class="fas fa-check text-success"></i> 3% Cashback on all spends</li>
+                                        <li><i class="fas fa-check text-success"></i> Reward Points (3 points per ₹100)</li>
+                                        <li><i class="fas fa-check text-success"></i> Unlimited airport lounge access</li>
+                                        <li><i class="fas fa-check text-success"></i> Concierge service (24/7)</li>
+                                        <li><i class="fas fa-check text-success"></i> Premium travel insurance</li>
+                                        <li><i class="fas fa-check text-success"></i> Golf course access + Pro membership</li>
+                                        <li><i class="fas fa-check text-success"></i> Personal relationship manager</li>
+                                    </ul>
+                                    
+                                    <hr>
+                                    <h6 class="mb-2">Eligibility Requirements:</h6>
+                                    <ul class="list-unstyled small">
+                                        <li><i class="fas fa-circle text-warning"></i> Age: 25-70 years</li>
+                                        <li><i class="fas fa-circle text-warning"></i> Minimum Annual Income: ₹25,00,000</li>
+                                        <li><i class="fas fa-circle text-warning"></i> Minimum Account Balance: ₹10,00,000</li>
+                                        <li><i class="fas fa-circle text-warning"></i> CIBIL Score: 800+</li>
+                                        <li><i class="fas fa-circle text-warning"></i> Employment: C-Suite/Business Owner</li>
+                                        <li><i class="fas fa-circle text-warning"></i> 10+ years banking relationship</li>
+                                        <li><i class="fas fa-circle text-warning"></i> Average Monthly Balance: ₹5,00,000+</li>
+                                    </ul>
+                                    
+                                    <hr>
+                                    <p class="small text-muted"><strong>Annual Fee:</strong> ₹10,000 (Waived on 5+ transactions)</p>
+                                    
+                                    <button type="button" class="btn btn-dark btn-block w-100" onclick="selectCard('platinum')">
+                                        Select This Card
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="applicationForm" style="display: none;">
+                        <hr>
+                        <h5 class="mb-4">Complete Your Application</h5>
+                        
+                        <form method="POST" action="{{ url_for('apply_credit_card') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            
+                            <div class="form-group mb-3">
+                                <label for="card_type" class="form-label">Selected Card Type</label>
+                                <input type="text" class="form-control" id="selectedCardDisplay" readonly>
+                                <input type="hidden" id="card_type" name="card_type" value="">
+                            </div>
+
+                            <div class="alert alert-warning" role="alert">
+                                <h6 class="alert-heading">⚠️ Eligibility Check</h6>
+                                <p class="mb-2">Before submitting, ensure you meet the eligibility requirements for the selected card type.</p>
+                                <ul class="mb-0" id="requirementsList">
+                                </ul>
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="declareCheck" name="declare_eligible" required>
+                                <label class="form-check-label" for="declareCheck">
+                                    I declare that I meet all the eligibility requirements for the selected card type
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="termsCheck" name="terms_agreed" required>
+                                <label class="form-check-label" for="termsCheck">
+                                    I agree to the Terms & Conditions and Privacy Policy
+                                </label>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-check"></i> Submit Application
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const cardRequirements = {
+    'standard': {
+        name: 'Standard Card (₹1,00,000 limit)',
+        requirements: [
+            'Age: 21-60 years',
+            'Minimum Annual Income: ₹3,00,000',
+            'Minimum Account Balance: ₹50,000',
+            'CIBIL Score: 700+',
+            'Employment: Salaried/Self-employed'
+        ]
+    },
+    'gold': {
+        name: 'Gold Card (₹5,00,000 limit)',
+        requirements: [
+            'Age: 23-65 years',
+            'Minimum Annual Income: ₹10,00,000',
+            'Minimum Account Balance: ₹2,00,000',
+            'CIBIL Score: 750+',
+            'Employment: Senior Manager/Director/Self-employed',
+            '5+ years banking relationship with us'
+        ]
+    },
+    'platinum': {
+        name: 'Platinum Card (₹10,00,000 limit)',
+        requirements: [
+            'Age: 25-70 years',
+            'Minimum Annual Income: ₹25,00,000',
+            'Minimum Account Balance: ₹10,00,000',
+            'CIBIL Score: 800+',
+            'Employment: C-Suite/Business Owner',
+            '10+ years banking relationship',
+            'Average Monthly Balance: ₹5,00,000+'
+        ]
+    }
+};
+
+function selectCard(cardType) {
+    const cardInfo = cardRequirements[cardType];
+    
+    document.getElementById('card_type').value = cardType;
+    document.getElementById('selectedCardDisplay').value = cardInfo.name;
+    
+    // Display requirements
+    const requirementsList = document.getElementById('requirementsList');
+    requirementsList.innerHTML = '';
+    cardInfo.requirements.forEach(req => {
+        const li = document.createElement('li');
+        li.innerHTML = `<i class="fas fa-check text-success"></i> ${req}`;
+        requirementsList.appendChild(li);
+    });
+    
+    document.getElementById('applicationForm').style.display = 'block';
+    document.querySelector('html, body').scrollTop = document.getElementById('applicationForm').offsetTop - 100;
+}
+
+function resetForm() {
+    document.getElementById('card_type').value = '';
+    document.getElementById('selectedCardDisplay').value = '';
+    document.getElementById('declareCheck').checked = false;
+    document.getElementById('termsCheck').checked = false;
+    document.getElementById('applicationForm').style.display = 'none';
+}
+</script>
+{% endblock %}

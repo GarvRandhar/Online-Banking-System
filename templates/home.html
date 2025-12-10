@@ -1,0 +1,480 @@
+{% extends 'base.html' %}
+
+{% block title %}YourBank - Digital Banking Platform{% endblock %}
+
+{% block content %}
+<div class="hero-section py-5">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6 mb-4">
+            <h1 class="hero-title text-gradient mb-4">
+                Your Bank,<br>Your Way
+            </h1>
+            <p class="hero-subtitle mb-4">
+                Experience seamless digital banking with cutting-edge security, innovative solutions, and personalized services designed for your financial success.
+            </p>
+            <div class="hero-cta-note">
+                <p class="text-muted mb-0">Use the menu at the top to open an account or sign in.</p>
+            </div>
+        </div>
+        <div class="col-lg-6 text-center">
+            <div style="animation: float 3s ease-in-out infinite;">
+                <i class="fas fa-university" style="font-size: 120px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5" style="border-color: rgba(0,0,0,0.1); border-width: 2px;">
+
+<section class="py-5">
+    <div class="text-center mb-5">
+        <h2 class="mb-3">Why Choose YourBank?</h2>
+        <p class="text-muted fs-5">Industry-leading features designed for your financial needs</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="dashboard-card text-center h-100">
+                <div class="dashboard-card-icon mx-auto mb-3" style="background: linear-gradient(135deg, #667eea, #5568d3); width: 60px; height: 60px;">
+                    <i class="fas fa-lock fs-4"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Bank-Level Security</h5>
+                <p class="text-muted">Your money is protected with military-grade encryption, two-factor authentication, and 24/7 fraud monitoring.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="dashboard-card text-center h-100">
+                <div class="dashboard-card-icon mx-auto mb-3" style="background: linear-gradient(135deg, #10b981, #34d399); width: 60px; height: 60px;">
+                    <i class="fas fa-mobile-alt fs-4"></i>
+                </div>
+                <h5 class="fw-bold mb-2">24/7 Access</h5>
+                <p class="text-muted">Manage your finances anytime, anywhere with our intuitive mobile-first platform and responsive design.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="dashboard-card text-center h-100">
+                <div class="dashboard-card-icon mx-auto mb-3" style="background: linear-gradient(135deg, #f59e0b, #fbbf24); width: 60px; height: 60px;">
+                    <i class="fas fa-chart-line fs-4"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Smart Investments</h5>
+                <p class="text-muted">Grow your wealth with personalized investment recommendations, real-time tracking, and expert insights.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="text-center mb-5">
+        <h2 class="mb-3">Our Products & Services</h2>
+        <p class="text-muted fs-5">Complete banking solutions for every need</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ url_for('signup') }}" style="text-decoration: none;">
+                <div class="dashboard-card text-center h-100 product-card">
+                    <div class="dashboard-card-icon mx-auto mb-3" style="background: linear-gradient(135deg, #3b82f6, #1e40af); width: 50px; height: 50px;">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h6 class="fw-bold">Savings Account</h6>
+                    <p class="text-muted" style="font-size: 0.9rem;">Earn up to 4% interest annually with no hidden charges.</p>
+                    <span class="badge bg-primary mt-3">Open Now</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ url_for('login') }}" style="text-decoration: none;">
+                <div class="dashboard-card text-center h-100 product-card">
+                    <div class="dashboard-card-icon mx-auto mb-3" style="background: linear-gradient(135deg, #667eea, #764ba2); width: 50px; height: 50px;">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h6 class="fw-bold">Credit Cards</h6>
+                    <p class="text-muted" style="font-size: 0.9rem;">Premium cards with exclusive rewards and cashback benefits.</p>
+                    <span class="badge bg-purple mt-3">Learn More</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ url_for('login') }}" style="text-decoration: none;">
+                <div class="dashboard-card text-center h-100 product-card">
+                    <div class="dashboard-card-icon mx-auto mb-3" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); width: 50px; height: 50px;">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <h6 class="fw-bold">Quick Loans</h6>
+                    <p class="text-muted" style="font-size: 0.9rem;">Personal, home, and business loans with instant approval.</p>
+                    <span class="badge bg-indigo mt-3">Apply Now</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ url_for('login') }}" style="text-decoration: none;">
+                <div class="dashboard-card text-center h-100 product-card">
+                    <div class="dashboard-card-icon mx-auto mb-3" style="background: linear-gradient(135deg, #ec4899, #be185d); width: 50px; height: 50px;">
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
+                    <h6 class="fw-bold">Investments</h6>
+                    <p class="text-muted" style="font-size: 0.9rem;">FD, RD, mutual funds, and stocks with expert guidance.</p>
+                    <span class="badge bg-pink mt-3">Start Investing</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 16px; margin: 3rem 0;">
+    <div class="row text-center">
+        <div class="col-md-3 mb-4">
+            <h3 class="fw-bold fs-2 mb-2">50+</h3>
+            <p class="mb-0">Satisfied Customers</p>
+        </div>
+        <div class="col-md-3 mb-4">
+            <h3 class="fw-bold fs-2 mb-2">₹100Cr+</h3>
+            <p class="mb-0">Total Transactions</p>
+        </div>
+        <div class="col-md-3 mb-4">
+            <h3 class="fw-bold fs-2 mb-2">24/7</h3>
+            <p class="mb-0">Customer Support</p>
+        </div>
+        <div class="col-md-3 mb-4">
+            <h3 class="fw-bold fs-2 mb-2">99.9%</h3>
+            <p class="mb-0">Uptime Guarantee</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="p-5 rounded-xl shadow-lg" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+        <div class="text-center">
+            <h3 class="mb-3 fw-bold">Ready to Take Control of Your Finances?</h3>
+            <p class="mb-4 fs-5">Join thousands of satisfied customers who trust YourBank for their banking needs. Open your account in just 2 minutes!</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="{{ url_for('signup') }}" class="btn btn-light btn-lg fw-bold" style="text-decoration: none;">
+                    <i class="fas fa-rocket"></i> Open Savings Account
+                </a>
+                <a href="{{ url_for('apply_current_account_redirect') }}" class="btn btn-outline-light btn-lg fw-bold" style="text-decoration: none; color: white; border-color: white;">
+                    <i class="fas fa-building"></i> Business Account
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="text-center mb-5">
+        <h2 class="mb-3">What Our Customers Love</h2>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="dashboard-card text-center">
+                <i class="fas fa-bolt" style="font-size: 2rem; color: #667eea; margin-bottom: 1rem;"></i>
+                <h6 class="fw-bold">Instant Account Opening</h6>
+                <p class="text-muted">Create your account and start banking in just 2 minutes.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dashboard-card text-center">
+                <i class="fas fa-shield-alt" style="font-size: 2rem; color: #667eea; margin-bottom: 1rem;"></i>
+                <h6 class="fw-bold">Secure & Protected</h6>
+                <p class="text-muted">Military-grade encryption keeps your data safe 24/7.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dashboard-card text-center">
+                <i class="fas fa-headset" style="font-size: 2rem; color: #667eea; margin-bottom: 1rem;"></i>
+                <h6 class="fw-bold">24/7 Support</h6>
+                <p class="text-muted">Our dedicated team is always ready to help you.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="text-center mb-5">
+        <h2 class="mb-3">Frequently Asked Questions</h2>
+        <p class="text-muted fs-5">Find answers to common questions</p>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            How do I open a Savings Account?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Click on "Open Account" button, fill in your basic details like name, email, phone, and date of birth. Deposit a minimum of ₹10,000 and your account will be created instantly. You'll get a debit card and online banking access immediately.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            How do I apply for a Credit Card?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Sign in to your account and navigate to "Apply Credit Card". Choose the card type (Standard, Gold, or Platinum) and submit your application. Our instant eligibility check will approve or reject your application immediately based on your account balance and income profile.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            Is my money safe?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Yes! We use bank-level 256-bit SSL encryption, two-factor authentication, and 24/7 fraud monitoring. Your deposits are insured up to ₹5,00,000 under the DICGC scheme.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                            What are the account fees?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Our Savings Account has zero monthly fees, zero balance requirements, and no hidden charges. We only charge for premium services which are optional.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                            Can I invest through my account?
+                        </button>
+                    </h2>
+                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Yes! You can invest in mutual funds, stocks, fixed deposits (FD), recurring deposits (RD), and more. Sign in to your account and navigate to the Investments section to get started.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                            How do I apply for a Business Current Account?
+                        </button>
+                    </h2>
+                    <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Click on "Business Account" button to apply for a Current Account. Select between Regular or Premium based on your business needs, fill in your business details, and get instant approval with minimal documentation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5" style="background: #f8f9ff; border-radius: 16px;">
+    <div class="text-center mb-5">
+        <h2 class="mb-3">What Our Customers Say</h2>
+        <p class="text-muted fs-5">Real reviews from real users</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="font-size: 2rem; color: #ffc107;">★★★★★</div>
+                </div>
+                <p class="text-muted mb-3">"YourBank has completely changed how I manage my finances. The app is user-friendly and the customer service is outstanding!"</p>
+                <p class="fw-bold mb-0">- Rajesh Kumar</p>
+                <p class="text-muted small">Bangalore</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="font-size: 2rem; color: #ffc107;">★★★★★</div>
+                </div>
+                <p class="text-muted mb-3">"The investment options are excellent and the returns are competitive. Highly recommended for anyone looking to grow their wealth."</p>
+                <p class="fw-bold mb-0">- Priya Sharma</p>
+                <p class="text-muted small">Mumbai</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dashboard-card">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="font-size: 2rem; color: #ffc107;">★★★★★</div>
+                </div>
+                <p class="text-muted mb-3">"Opening my business current account was seamless. The credit facility was approved within minutes. Great experience!"</p>
+                <p class="fw-bold mb-0">- Amit Patel</p>
+                <p class="text-muted small">Delhi</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .dashboard-card {
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        padding: 1.5rem;
+        background: white;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .product-card {
+        cursor: pointer;
+    }
+
+    .product-card:hover {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+    }
+
+    .dashboard-card-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: white;
+    }
+
+    .btn-outline-primary {
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        background: white;
+    }
+
+    .btn-outline-primary:hover {
+        color: white;
+        background: var(--primary);
+        border-color: var(--primary);
+    }
+
+    .btn-outline-light {
+        color: white;
+        border: 2px solid white;
+        background: transparent;
+    }
+
+    .btn-outline-light:hover {
+        color: var(--primary);
+        background: white;
+        border-color: white;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        color: var(--primary);
+        font-weight: 600;
+    }
+
+    .accordion-item {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-section {
+        padding: 3rem 0;
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--gray);
+        margin-bottom: 3rem; 
+    }
+
+    .hero-cta-note {
+        margin-top: 0.25rem;
+    }
+
+    .hero-cta-note .text-muted {
+        font-size: 0.95rem;
+    }
+
+    .text-gradient {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .badge {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .bg-purple {
+        background: #667eea !important;
+    }
+
+    .bg-indigo {
+        background: #8b5cf6 !important;
+    }
+
+    .bg-pink {
+        background: #ec4899 !important;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}

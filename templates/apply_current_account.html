@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply for Current Account{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Choose Your Current Account Type</h2>
+    <div class="row justify-content-center">
+        <!-- Regular Current Account -->
+        <div class="col-md-5 mb-4">
+            <div class="card shadow-lg h-100">
+                <div class="card-body">
+                    <h3 class="card-title">Regular Current Account</h3>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>• Monthly account balance: <b>₹50,000</b></li>
+                        <li>• Free cash deposit up to <b>₹18,00,000</b> per month</li>
+                        <li>• Withdraw & deposit cash at all branches</li>
+                        <li>• Free access to secure internet banking</li>
+                        <li>• Free <b>20 Demand Drafts</b> per month</li>
+                        <li>• <b>Quarterly charges: ₹1,000</b></li>
+                    </ul>
+                    <a href="{{ url_for('current_account_info', account_type='regular') }}" class="btn btn-link">More Information</a>
+                    <a href="{{ url_for('current_account_apply', account_type='regular') }}" class="btn btn-primary ms-2">Apply Now</a>
+                </div>
+            </div>
+        </div>
+        <!-- Premium Current Account -->
+        <div class="col-md-5 mb-4">
+            <div class="card shadow-lg h-100">
+                <div class="card-body">
+                    <h3 class="card-title">Premium Current Account</h3>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>• Monthly account balance: <b>₹35,00,000</b></li>
+                        <li>• Free cash deposit up to <b>₹5,00,00,000</b> per month</li>
+                        <li>• Unlimited free cash withdrawal from home branch</li>
+                        <li>• Unlimited free Demand Drafts/Banker Cheques</li>
+                        <li>• <b>Quarterly charges: ₹300</b></li>
+                    </ul>
+                    <a href="{{ url_for('current_account_info', account_type='premium') }}" class="btn btn-link">More Information</a>
+                    <a href="{{ url_for('current_account_apply', account_type='premium') }}" class="btn btn-success ms-2">Apply Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

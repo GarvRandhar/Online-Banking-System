@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Apply Home Loan - YourBank{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Home Loan Application</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>Loan Features:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>Loan Amount: Up to ₹2 Crores</li>
+                            <li>Interest Rate: 8% p.a.</li>
+                            <li>Processing Fee: 1% (deducted from loan amount)</li>
+                            <li>Repayment: Up to 30 years</li>
+                        </ul>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('submit_loan_application') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="loan_type" value="home">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="loan_amount">Loan Amount (₹) *</label>
+                                    <input type="number" class="form-control" id="loan_amount" name="loan_amount" 
+                                           min="100000" max="20000000" step="1000" required>
+                                    <small class="form-text text-muted">Maximum: ₹2,00,00,000</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tenure_months">Loan Tenure (Years) *</label>
+                                    <select class="form-control" id="tenure_months" name="tenure_months" required>
+                                        <option value="">Select Tenure</option>
+                                        <option value="60">5 Years</option>
+                                        <option value="120">10 Years</option>
+                                        <option value="180">15 Years</option>
+                                        <option value="240">20 Years</option>
+                                        <option value="300">25 Years</option>
+                                        <option value="360">30 Years</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="property_value">Property Value (₹) *</label>
+                                    <input type="number" class="form-control" id="property_value" name="property_value" 
+                                           min="100000" required>
+                                    <small class="form-text text-muted">Total value of the property</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="annual_income">Annual Income (₹) *</label>
+                                    <input type="number" class="form-control" id="annual_income" name="annual_income" 
+                                           min="100000" required>
+                                    <small class="form-text text-muted">Your total annual income</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nationality">Nationality *</label>
+                                    <select class="form-control" id="nationality" name="nationality" required>
+                                        <option value="Indian">Resident Indian</option>
+                                        <option value="NRI">Non-Resident Indian (NRI)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="age">Age *</label>
+                                    <input type="number" class="form-control" id="age" name="age" 
+                                           min="18" max="70" required>
+                                    <small class="form-text text-muted">Age: 18-70 years</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="property_type">Property Type *</label>
+                            <select class="form-control" id="property_type" name="property_type" required>
+                                <option value="">Select Property Type</option>
+                                <option value="APARTMENT">Apartment</option>
+                                <option value="VILLA">Villa/Independent House</option>
+                                <option value="PLOT">Plot/Land</option>
+                                <option value="COMMERCIAL">Commercial Property</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    I agree to the <a href="#" target="_blank">Terms and Conditions</a> and authorize YourBank to verify my information and property documents.
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-success btn-lg">Submit Application</button>
+                            <a href="{{ url_for('loans') }}" class="btn btn-secondary btn-lg ml-2">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('loan_amount').addEventListener('input', function() {
+    const amount = parseInt(this.value);
+    const tenure = document.getElementById('tenure_months').value;
+    
+    if (amount && tenure) {
+        const monthlyRate = 8 / (12 * 100);
+        const emi = Math.round(amount * monthlyRate * Math.pow(1 + monthlyRate, tenure) / (Math.pow(1 + monthlyRate, tenure) - 1));
+        const processingFee = Math.round(amount * 0.01);
+        const disbursedAmount = amount - processingFee;
+        
+        document.getElementById('emi-info').innerHTML = `
+            <div class="alert alert-success">
+                <strong>Loan Summary:</strong><br>
+                Processing Fee: ₹${processingFee.toLocaleString()}<br>
+                Amount to be disbursed: ₹${disbursedAmount.toLocaleString()}<br>
+                Monthly EMI: ₹${emi.toLocaleString()}
+            </div>
+        `;
+    }
+});
+
+document.getElementById('tenure_months').addEventListener('change', function() {
+    document.getElementById('loan_amount').dispatchEvent(new Event('input'));
+});
+</script>
+
+<div id="emi-info"></div>
+{% endblock %}

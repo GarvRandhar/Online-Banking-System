@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Transfer Money{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card p-4 shadow-lg">
+      <h2 class="text-center mb-4">Transfer Money</h2>
+      <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="mb-3">
+          <label for="from_acno" class="form-label">Your Account Number</label>
+          <input type="text" class="form-control" name="from_acno" value={{ acno }} required pattern="\d{10}">
+        </div>
+
+        <div class="mb-3">
+          <label for="to_acno" class="form-label">Recipient Account Number</label>
+          <input type="text" class="form-control" name="to_acno" required pattern="\d{10}">
+        </div>
+
+        <div class="mb-3">
+          <label for="amount" class="form-label">Amount to Transfer</label>
+          <input type="number" class="form-control" name="amount" value = "1" required min="1">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Transfer</button>
+      </form>
+
+      {% if message %}
+      <div class="alert alert-info mt-3">{{ message }}</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

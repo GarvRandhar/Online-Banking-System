@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Two-Factor Authentication{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Two-Factor Authentication (2FA)</h4>
+                </div>
+                <div class="card-body">
+                    {% if step == 'initial' %}
+                        <div class="alert alert-info">
+                            <h5>Secure Your Account</h5>
+                            <p>Two-Factor Authentication adds an extra layer of security to your account. In addition to your password, you'll need to enter a code from your phone to log in.</p>
+                        </div>
+
+                        {% if two_factor_enabled %}
+                        <div class="alert alert-success mb-3">
+                            <i class="bi bi-check-circle"></i> Two-Factor Authentication is <strong>ENABLED</strong>
+                        </div>
+
+                        <form method="POST" action="{{ url_for('setup_2fa') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="action" value="disable">
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Enter Your Password to Disable 2FA</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+
+                            <div class="alert alert-warning">
+                                <small>Disabling 2FA will reduce your account security.</small>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-danger">Disable 2FA</button>
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+                            </div>
+                        </form>
+                        {% else %}
+                        <div class="alert alert-warning mb-3">
+                            <i class="bi bi-exclamation-circle"></i> Two-Factor Authentication is <strong>DISABLED</strong>
+                        </div>
+
+                        <h5 class="mb-3">Setup Instructions:</h5>
+                        <ol>
+                            <li>Download an authenticator app on your phone:
+                                <ul>
+                                    <li>Google Authenticator</li>
+                                    <li>Microsoft Authenticator</li>
+                                    <li>Authy</li>
+                                    <li>LastPass Authenticator</li>
+                                </ul>
+                            </li>
+                            <li>Click "Enable 2FA" below</li>
+                            <li>Scan the QR code with your authenticator app</li>
+                            <li>Enter the 6-digit code from your app</li>
+                        </ol>
+
+                        <form method="POST" action="{{ url_for('setup_2fa') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="action" value="enable">
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success">Enable 2FA</button>
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+                            </div>
+                        </form>
+                        {% endif %}
+
+                    {% elif step == 'verify' %}
+                        <div class="alert alert-info">
+                            <h5>Verify Your Authenticator App</h5>
+                            <p>Scan the QR code below with your authenticator app, then enter the 6-digit code shown in the app.</p>
+                        </div>
+
+                        {% if qr_code %}
+                        <div class="text-center mb-4">
+                            <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code" style="max-width: 300px;">
+                            <p class="text-muted mt-2">Can't scan? Enter this code manually:</p>
+                            <code class="bg-light p-2 d-block">{{ secret }}</code>
+                        </div>
+                        {% endif %}
+
+                        <form method="POST" action="{{ url_for('setup_2fa') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="action" value="verify">
+                            <input type="hidden" name="secret" value="{{ secret }}">
+                            
+                            <div class="mb-3">
+                                <label for="otp_code" class="form-label">Enter 6-Digit Code</label>
+                                <input type="text" class="form-control form-control-lg text-center" 
+                                       id="otp_code" name="otp_code" maxlength="6" 
+                                       pattern="[0-9]{6}" placeholder="000000" required 
+                                       inputmode="numeric" autocomplete="off">
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Verify & Enable 2FA</button>
+                            </div>
+                        </form>
+
+                    {% elif step == 'disable' %}
+                        <div class="alert alert-warning">
+                            <h5>Disable Two-Factor Authentication</h5>
+                            <p>Are you sure you want to disable 2FA? This will reduce your account security.</p>
+                        </div>
+
+                        <form method="POST" action="{{ url_for('setup_2fa') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="action" value="disable">
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Enter Your Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-danger">Confirm - Disable 2FA</button>
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

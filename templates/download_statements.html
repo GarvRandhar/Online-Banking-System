@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Statements | SecureBank Pro</title>
+    <!-- Add your CSS and JS links here -->
+</head>
+<body>
+    {% extends 'base.html' %}
+
+    {% block title %}Download Statements | SecureBank Pro{% endblock %}
+
+    {% block content %}
+    <div class="container">
+      <div class="page-header text-center animate__animated animate__fadeInDown">
+        <h1 class="page-title">Download Account Statements</h1>
+        <p class="page-subtitle">Export your transaction history for accounting and record-keeping</p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-xl-8">
+          
+          <!-- Statement Options -->
+          <div class="business-features-grid animate__animated animate__fadeInUp">
+            <div class="business-feature-card">
+              <div class="business-icon">
+                <i class="fas fa-file-pdf"></i>
+              </div>
+              <h5 class="mb-3">PDF Statement</h5>
+              <p class="text-muted mb-4">Professional formatted statement ideal for official documentation and archival purposes.</p>
+              <ul class="list-unstyled text-sm mb-4">
+                <li><i class="fas fa-check-circle text-success me-2"></i>Bank letterhead format</li>
+                <li><i class="fas fa-check-circle text-success me-2"></i>Digital signature</li>
+                <li><i class="fas fa-check-circle text-success me-2"></i>Print-ready format</li>
+              </ul>
+            </div>
+
+            <div class="business-feature-card">
+              <div class="business-icon" style="background: linear-gradient(135deg, var(--success) 0%, #34d399 100%);">
+                <i class="fas fa-file-excel"></i>
+              </div>
+              <h5 class="mb-3">Excel Statement</h5>
+              <p class="text-muted mb-4">Spreadsheet format perfect for accounting software integration and financial analysis.</p>
+              <ul class="list-unstyled text-sm mb-4">
+                <li><i class="fas fa-check-circle text-success me-2"></i>Editable format</li>
+                <li><i class="fas fa-check-circle text-success me-2"></i>Easy data manipulation</li>
+                <li><i class="fas fa-check-circle text-success me-2"></i>Software compatible</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Download Form -->
+          <div class="card border-0 shadow-lg animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="card-body p-5">
+              <div class="text-center mb-4">
+                <div class="business-icon mx-auto mb-3" style="background: linear-gradient(135deg, var(--info) 0%, var(--primary) 100%);">
+                  <i class="fas fa-download"></i>
+                </div>
+                <h3 class="h4 mb-2">Generate Statement</h3>
+                <p class="text-muted">Select your preferred format and download instantly</p>
+              </div>
+
+              <form method="POST" class="payment-form-container">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                
+                <!-- Format Selection -->
+                <div class="mb-4">
+                  <label class="form-label fw-semibold">Select Format</label>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="format" id="pdf" value="pdf" checked>
+                        <label class="form-check-label w-100 p-4 border rounded text-center" for="pdf">
+                          <i class="fas fa-file-pdf text-danger d-block mb-2 fs-2"></i>
+                          <strong>PDF Format</strong>
+                          <br><small class="text-muted">Professional & Print-ready</small>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="format" id="excel" value="excel">
+                        <label class="form-check-label w-100 p-4 border rounded text-center" for="excel">
+                          <i class="fas fa-file-excel text-success d-block mb-2 fs-2"></i>
+                          <strong>Excel Format</strong>
+                          <br><small class="text-muted">Editable & Analysis-ready</small>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Date Range Selection -->
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <label for="start_date" class="form-label fw-semibold">From Date</label>
+                    <input type="date" name="start_date" id="start_date" class="form-control">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="end_date" class="form-label fw-semibold">To Date</label>
+                    <input type="date" name="end_date" id="end_date" class="form-control">
+                  </div>
+                </div>
+
+                <!-- Quick Date Options -->
+                <div class="mb-4">
+                  <label class="form-label fw-semibold">Quick Select</label>
+                  <div class="quick-amounts">
+                    <button type="button" class="quick-amount-btn" data-period="7">Last 7 Days</button>
+                    <button type="button" class="quick-amount-btn" data-period="30">Last Month</button>
+                    <button type="button" class="quick-amount-btn" data-period="90">Last 3 Months</button>
+                    <button type="button" class="quick-amount-btn" data-period="365">Last Year</button>
+                  </div>
+                </div>
+
+                <!-- Download Options -->
+                <div class="mb-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="email_copy" name="email_copy">
+                    <label class="form-check-label" for="email_copy">
+                      <i class="fas fa-envelope me-2 text-primary"></i>
+                      Also send a copy to my registered email
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Download Button -->
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-download me-2"></i>Generate & Download Statement
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Information Cards -->
+          <div class="row mt-4 animate__animated animate__fadeInUp animate__delay-2s">
+            <div class="col-md-6 mb-3">
+              <div class="alert alert-modern alert-info">
+                <div class="d-flex align-items-start">
+                  <i class="fas fa-info-circle me-3 mt-1"></i>
+                  <div>
+                    <strong>Statement Delivery</strong><br>
+                    <small>Statements are generated instantly and can be emailed to your registered address for additional security.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="alert alert-modern alert-success">
+                <div class="d-flex align-items-start">
+                  <i class="fas fa-shield-alt me-3 mt-1"></i>
+                  <div>
+                    <strong>Secure & Encrypted</strong><br>
+                    <small>All statements are digitally signed and encrypted to ensure authenticity and security.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Back Link -->
+          <div class="text-center mt-4">
+            <a href="{{ url_for('current_account_dashboard') }}" class="text-decoration-none">
+              <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Format selection styling
+      document.querySelectorAll('input[name="format"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          document.querySelectorAll('label[for="pdf"], label[for="excel"]').forEach(label => {
+            label.classList.remove('border-primary', 'bg-light');
+          });
+          
+          const selectedLabel = document.querySelector(`label[for="${this.value}"]`);
+          if (selectedLabel) {
+            selectedLabel.classList.add('border-primary', 'bg-light');
+          }
+        });
+      });
+
+      // Initialize first option
+      document.querySelector('label[for="pdf"]').classList.add('border-primary', 'bg-light');
+
+      // Quick date selection
+      document.querySelectorAll('.quick-amount-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const days = parseInt(this.getAttribute('data-period'));
+          const endDate = new Date();
+          const startDate = new Date();
+          startDate.setDate(startDate.getDate() - days);
+          
+          document.getElementById('start_date').value = startDate.toISOString().split('T')[0];
+          document.getElementById('end_date').value = endDate.toISOString().split('T')[0];
+          
+          // Update active state
+          document.querySelectorAll('.quick-amount-btn').forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Set default dates (last 30 days)
+      const endDate = new Date();
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 30);
+      document.getElementById('start_date').value = startDate.toISOString().split('T')[0];
+      document.getElementById('end_date').value = endDate.toISOString().split('T')[0];
+    </script>
+    {% endblock %}
+</body>
+</html>

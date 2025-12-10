@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply for {% if account_type == 'premium' %}Premium{% else %}Regular{% endif %} Current Account{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">
+        Apply for {% if account_type == 'premium' %}Premium{% else %}Regular{% endif %} Current Account
+    </h2>
+    <form method="post" class="mx-auto" style="max-width: 600px;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="name" class="form-control" required value="{{ form.name or '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Phone Number</label>
+            <input type="text" name="phone" class="form-control" maxlength="10" required value="{{ form.phone or '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required value="{{ form.email or '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Date of Birth</label>
+            <input type="date" name="dob" class="form-control" required value="{{ form.dob or '' }}">
+        </div>
+        <div class="form-group">
+            <label for="business_type">Business Type</label>
+            <select id="business_type" name="business_type" class="form-control" required onchange="updateBusinessNameLabel()">
+                <option value="">Select</option>
+                {% for btype in business_types %}
+                <option value="{{ btype }}" {% if form.business_type == btype %}selected{% endif %}>{{ btype }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label id="business_name_label" for="company_name">Business/Organization Name</label>
+            <input type="text" id="company_name" name="company_name" class="form-control" value="{{ form.company_name or '' }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Annual Turnover (₹)</label>
+            <input type="number" name="turnover" class="form-control" min="0" required value="{{ form.turnover or '' }}">
+            {% if account_type == 'premium' %}
+            <div class="form-text text-danger">Minimum turnover required: ₹4,00,00,000</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Company/Organization Start Date</label>
+            <input type="date" name="start_date" class="form-control" required value="{{ form.start_date or '' }}">
+        </div>
+        <!-- Add more fields as needed -->
+        <button type="submit" class="btn btn-primary w-100">Submit Application</button>
+    </form>
+    <div class="text-center mt-3">
+        <a href="{{ url_for('home') }}" class="btn btn-link">Back</a>
+    </div>
+</div>
+<script>
+function updateBusinessNameLabel() {
+    var type = document.getElementById('business_type').value;
+    var label = "Business/Organization Name";
+    if (type === "Trust") label = "Trust Name";
+    else if (type === "Association") label = "Association Name";
+    else if (type === "Partnership") label = "Partnership Name";
+    else if (type === "LLP") label = "LLP Name";
+    else if (type === "Sole Proprietorship") label = "Proprietor Name";
+    else if (type === "Private Limited Company" || type === "Public Limited Company") label = "Company Name";
+    else if (type === "Business") label = "Business Name";
+    document.getElementById('business_name_label').innerText = label;
+}
+window.onload = updateBusinessNameLabel;
+</script>
+{% endblock %}
+          });
+    };

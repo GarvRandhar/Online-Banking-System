@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}My Credit Cards - YourBank{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="mb-4">💳 My Credit Cards</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{{ url_for('apply_credit_card') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Apply for New Card
+            </a>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else 'success' if category == 'success' else 'info' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if credit_cards %}
+    <div class="row">
+        {% for card in credit_cards %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div>
+                            <h5 class="card-title mb-0">{{ card.card_type|title }} Card</h5>
+                            <small class="text-light">{{ card.card_number[:4] }}***{{ card.card_number[-4:] }}</small>
+                        </div>
+                        <div>
+                            {% if card.status == 'ACTIVE' %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ card.status }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <small class="text-light">Card Holder Name</small>
+                            <p class="mb-0 fw-bold">{{ card.account.name }}</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <small class="text-light">Expiry Date</small>
+                            <p class="mb-0 fw-bold">{{ card.expiry_date }}</p>
+                        </div>
+                    </div>
+
+                    <hr class="bg-light">
+
+                    <div class="row">
+                        <div class="col-6">
+                            <small class="text-light">Credit Limit</small>
+                            <p class="mb-0 fw-bold">₹{{ "%.2f"|format(card.credit_limit) }}</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <small class="text-light">Balance Owed</small>
+                            <p class="mb-0 fw-bold text-danger">₹{{ "%.2f"|format(card.current_balance) }}</p>
+                        </div>
+                    </div>
+
+                    <hr class="bg-light">
+
+                    <div class="mb-3">
+                        <small class="text-light">Credit Used</small>
+                        <div class="progress" style="height: 6px;">
+                            {% set used_percent = (card.current_balance / card.credit_limit) * 100 %}
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: {{ used_percent }}%" aria-valuenow="{{ used_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <small class="text-light">₹{{ "%.2f"|format(card.current_balance) }} / ₹{{ "%.2f"|format(card.credit_limit) }}</small>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('credit_card_purchase', card_id=card.id) }}" class="btn btn-light btn-sm">
+                            <i class="fas fa-shopping-cart"></i> Make Purchase
+                        </a>
+                        <a href="{{ url_for('credit_card_payment', card_id=card.id) }}" class="btn btn-light btn-sm">
+                            <i class="fas fa-credit-card"></i> Make Payment
+                        </a>
+                        <a href="{{ url_for('credit_card_statement', card_id=card.id) }}" class="btn btn-light btn-sm">
+                            <i class="fas fa-file-alt"></i> View Statement
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        <h5><i class="fas fa-info-circle"></i> No Active Credit Cards</h5>
+        <p class="mb-0">You don't have any active credit cards yet.</p>
+        <a href="{{ url_for('apply_credit_card') }}" class="btn btn-primary mt-3">
+            <i class="fas fa-plus"></i> Apply for Your First Card
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

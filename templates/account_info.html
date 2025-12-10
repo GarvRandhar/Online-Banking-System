@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Account Details | Banking System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow-lg p-4 animate__animated animate__fadeIn">
+      <div class="text-center mb-4">
+        <h2><i class="fas fa-user-circle text-primary me-2"></i>Your Account Information</h2>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <tbody>
+            <tr>
+              <th scope="row" class="text-end" style="width: 40%">Account Holder:</th>
+              <td>{{ account.name }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-end">Account Number:</th>
+              <td>{{ account.acno }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-end">Date of Birth:</th>
+              <td>{{ account.dob }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-end">Phone:</th>
+              <td>{{ account.phone }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-end">Address:</th>
+              <td>{{ account.address }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-end">Opening Balance:</th>
+              <td>₹{{ account.opening_balance }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-end">Account Created:</th>
+              <td>{{ account.created_at.strftime('%d %B %Y, %H:%M') }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-grid gap-2 mt-4">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Return to Dashboard</a>
+        <a href="{{ url_for('transactions') }}" class="btn btn-info">View Transaction History</a>
+      </div>
+
+      <div class="alert alert-warning mt-4" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        For security reasons, please ensure you log out after viewing your account information.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

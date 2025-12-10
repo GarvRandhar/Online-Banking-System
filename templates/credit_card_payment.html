@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Credit Card Payment - YourBank{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">💳 Make Credit Card Payment</h4>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'error' else 'success' if category == 'success' else 'info' }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    {% if amount_owed <= 0 %}
+                        <div class="alert alert-success" role="alert">
+                            <i class="fas fa-check-circle"></i>
+                            <strong>No Outstanding Balance!</strong>
+                            <p class="mb-0 mt-2">Your credit card account is in good standing. There is no balance to pay at this time.</p>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-light border mb-4">
+                            <h6><i class="fas fa-credit-card"></i> Card Details</h6>
+                            <div class="row">
+                                <div class="col-6">
+                                    <small class="text-muted">Card</small>
+                                    <p class="fw-bold">****{{ credit_card.card_number[-4:] }} - {{ credit_card.card_type|title }}</p>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">Credit Limit</small>
+                                    <p class="fw-bold">₹{{ "%.2f"|format(credit_card.credit_limit) }}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-6">
+                                    <small class="text-muted">Amount Owed (Used)</small>
+                                    {% set amount_owed = credit_card.credit_limit - credit_card.available_credit %}
+                                    <p class="fw-bold text-danger">₹{{ "%.2f"|format(amount_owed) }}</p>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">Available Credit</small>
+                                    <p class="fw-bold text-success">₹{{ "%.2f"|format(credit_card.available_credit) }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form method="POST" action="{{ url_for('credit_card_payment', card_id=credit_card.id) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            
+                            <div class="form-group mb-3">
+                                <label for="payment_amount" class="form-label">Payment Amount (₹)</label>
+                                <input type="number" class="form-control" id="payment_amount" name="payment_amount" 
+                                       placeholder="Enter payment amount" min="1" step="1" required>
+                                <small class="text-muted">Maximum you can pay: ₹{{ "%.2f"|format(amount_owed) }}</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <small class="text-muted">Credit Usage Status</small>
+                                <div class="progress" style="height: 10px;">
+                                    {% set used_percent = ((credit_card.credit_limit - credit_card.available_credit) / credit_card.credit_limit) * 100 %}
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{ used_percent }}%" aria-valuenow="{{ used_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-1">
+                                    <small class="text-muted">Used: ₹{{ "%.2f"|format(amount_owed) }}</small>
+                                    <small class="text-muted">Available: ₹{{ "%.2f"|format(credit_card.available_credit) }}</small>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-info" role="alert">
+                                <strong><i class="fas fa-info-circle"></i> How Credit Card Payment Works:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>🏦 Money is deducted from your <strong>Savings Account</strong></li>
+                                    <li>💳 This payment reduces your credit card balance owed</li>
+                                    <li>📈 Your available credit increases after payment</li>
+                                    <li>⏱️ Processing typically takes 24 hours</li>
+                                    <li>✅ You can only pay up to the amount you currently owe</li>
+                                </ul>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-check"></i> Confirm Payment
+                                </button>
+                                <a href="{{ url_for('my_credit_cards') }}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Back to Cards
+                                </a>
+                            </div>
+                        </form>
+
+                        <hr>
+                        <div class="alert alert-light border-left border-info">
+                            <h6 class="text-info"><i class="fas fa-lightbulb"></i> Example:</h6>
+                            <small>
+                                If you have a credit limit of ₹1,00,000 and used ₹50,000, you can pay any amount from ₹1 to ₹50,000. 
+                                After payment of ₹20,000, your available credit becomes ₹70,000 (₹1,00,000 - ₹30,000 remaining owed).
+                            </small>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

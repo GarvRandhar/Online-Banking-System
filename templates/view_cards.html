@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Your Cards</h2>
+
+    <h3>Debit Cards</h3>
+    {% if debit_cards %}
+        <ul class="list-group mb-4">
+            {% for card in debit_cards %}
+            <li class="list-group-item">
+                <strong>Card Number:</strong> {{ card.card_number }}<br>
+                <strong>Expiry Date:</strong> {{ card.expiry_date }}<br>
+                <strong>CVV:</strong> {{ card.cvv }}
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No debit cards found.</p>
+    {% endif %}
+</div>
+{% endblock %}

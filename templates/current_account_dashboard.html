@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Account Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block title %}Current Account Dashboard{% endblock %}
+    {% block content %}
+    <div class="container mt-5">
+        <h1>Welcome, {{ account.name }}</h1>
+        <h3>Current Account Dashboard</h3>
+        <hr>
+
+        <!-- Alerts -->
+        {% if alerts %}
+        <div class="alert alert-warning">
+            <ul>
+            {% for alert in alerts %}
+                <li>{{ alert }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Business Insights Graphs -->
+        <div class="row">
+            <div class="col-md-6">
+                <canvas id="turnoverChart"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="expenseChart"></canvas>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const turnoverLabels = {{ turnover_data.keys()|list|tojson }};
+            const turnoverValues = {{ turnover_data.values()|list|tojson }};
+            const expenseValues = {{ expense_data.values()|list|tojson }};
+            new Chart(document.getElementById('turnoverChart'), {
+                type: 'bar',
+                data: { labels: turnoverLabels, datasets: [{ label: 'Turnover', data: turnoverValues, backgroundColor: 'blue' }] }
+            });
+            new Chart(document.getElementById('expenseChart'), {
+                type: 'bar',
+                data: { labels: turnoverLabels, datasets: [{ label: 'Expenses', data: expenseValues, backgroundColor: 'red' }] }
+            });
+        </script>
+
+        <!-- Expense/Income Categorization -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5>Expense & Income Categorization</h5>
+                <p><strong>Total Income:</strong> ₹{{ income_data.values()|sum }}</p>
+                <p><strong>Total Expenses:</strong> ₹{{ expense_data.values()|sum }}</p>
+            </div>
+        </div>
+
+        <!-- Exclusive Offers -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5>Exclusive Offers</h5>
+                <ul>
+                    {% for offer in offers %}
+                    <li>{{ offer }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Calendar for Important Dates -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5>Important Dates</h5>
+                <ul>
+                    {% for item in important_dates %}
+                    <li>{{ item.date }}: {{ item.event }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Existing Features: Transactions, Balance, Transfer, etc. -->
+        <div class="row mt-4">
+            <div class="col-md-3 mb-2">
+                <a href="{{ url_for('transactions') }}" class="btn btn-primary btn-block">View Transactions</a>
+            </div>
+            <div class="col-md-3 mb-2">
+                <a href="{{ url_for('balance') }}" class="btn btn-success btn-block">Check Balance</a>
+            </div>
+            <div class="col-md-3 mb-2">
+                <a href="{{ url_for('transfer') }}" class="btn btn-warning btn-block">Transfer Money</a>
+            </div>
+            <div class="col-md-3 mb-2">
+                <form action="{{ url_for('download_statements') }}" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <select name="format" class="form-control mb-2">
+                        <option value="pdf">PDF</option>
+                        <option value="excel">Excel</option>
+                    </select>
+                    <button type="submit" class="btn btn-info btn-block">Download Statements</button>
+                </form>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-6 mb-2">
+                <a href="{{ url_for('bulk_payments') }}" class="btn btn-secondary btn-block">Bulk Payments</a>
+            </div>
+            <div class="col-md-6 mb-2">
+                <a href="{{ url_for('gst_tax_payments') }}" class="btn btn-secondary btn-block">GST/Tax Payments</a>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

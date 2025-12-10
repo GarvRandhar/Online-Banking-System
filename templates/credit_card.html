@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}Credit Card - {{ credit_card.card_type }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Card Details -->
+            <div class="card mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h3>{{ credit_card.card_type }} Card</h3>
+                        <span class="badge bg-light text-dark">{{ credit_card.status }}</span>
+                    </div>
+
+                    <h4 class="font-monospace mb-4">{{ credit_card.card_number[:4] }} **** **** {{ credit_card.card_number[-4:] }}</h4>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="text-white-50 mb-1">Credit Limit</p>
+                            <h5>₹{{ credit_card.credit_limit|format_currency }}</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-white-50 mb-1">Available Balance</p>
+                            <h5 class="text-success">₹{{ credit_card.available_balance|format_currency }}</h5>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <p class="text-white-50 mb-1">Outstanding Balance</p>
+                            <h5>₹{{ credit_card.outstanding_balance|format_currency }}</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-white-50 mb-1">Expiry Date</p>
+                            <h5>{{ credit_card.expiry_date }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Form -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Pay Credit Card Bill</h5>
+                </div>
+                <div class="card-body">
+                    {% if credit_card.outstanding_balance > 0 %}
+                    <form method="POST" action="{{ url_for('credit_card_view', card_id=credit_card.id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="action" value="pay">
+
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Payment Amount (₹)</label>
+                            <input type="number" class="form-control" id="amount" name="amount" 
+                                   placeholder="Enter amount" max="{{ credit_card.outstanding_balance }}" required>
+                            <small class="text-muted">Outstanding: ₹{{ credit_card.outstanding_balance|format_currency }}</small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">Pay Now</button>
+                        </div>
+                    </form>
+                    {% else %}
+                    <div class="alert alert-success">
+                        ✓ No outstanding balance. Your account is in good standing!
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between">
+                    <h5 class="mb-0">Recent Transactions</h5>
+                    <form method="POST" action="{{ url_for('credit_card_statement', card_id=credit_card.id) }}" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-sm btn-light">Download Statement</button>
+                    </form>
+                </div>
+                <div class="card-body">
+                    {% if transactions %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for txn in transactions %}
+                                <tr>
+                                    <td>{{ txn.transaction_date.strftime('%d-%m-%Y %H:%M') }}</td>
+                                    <td>
+                                        {% if txn.transaction_type == 'PAYMENT' %}
+                                            <span class="badge bg-success">{{ txn.transaction_type }}</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">{{ txn.transaction_type }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>₹{{ txn.amount|format_currency }}</td>
+                                    <td>{{ txn.description }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No transactions yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-md-4">
+            <!-- Card Info -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Card Information</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-7">Card Type:</dt>
+                        <dd class="col-sm-5"><strong>{{ credit_card.card_type }}</strong></dd>
+
+                        <dt class="col-sm-7">Status:</dt>
+                        <dd class="col-sm-5">
+                            {% if credit_card.status == 'ACTIVE' %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-danger">{{ credit_card.status }}</span>
+                            {% endif %}
+                        </dd>
+
+                        <dt class="col-sm-7">Created:</dt>
+                        <dd class="col-sm-5">{{ credit_card.created_at.strftime('%d-%m-%Y') }}</dd>
+
+                        <dt class="col-sm-7">Annual Fee:</dt>
+                        <dd class="col-sm-5">₹{{ credit_card.annual_fee|format_currency }}</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Card Features</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success"></i> 
+                            {% if credit_card.card_type == 'SILVER' %}
+                                1% Cashback
+                            {% elif credit_card.card_type == 'GOLD' %}
+                                2% Cashback
+                            {% else %}
+                                3% Cashback
+                            {% endif %}
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success"></i> 
+                            Interest-free Period: 20 days
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success"></i> 
+                            Emergency Support: 24/7
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success"></i> 
+                            Reward Points on every purchase
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

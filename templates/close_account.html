@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Close Account | Banking System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-lg p-4 animate__animated animate__fadeIn">
+      <h2 class="text-center mb-4">Close Your Bank Account</h2>
+      
+      <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Warning!</h4>
+        <p>This action cannot be undone. All your account information and transaction history will be permanently deleted.</p>
+        <hr>
+        <p class="mb-0">Please make sure you've withdrawn all your money before closing the account.</p>
+      </div>
+      
+      <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="mb-3">
+          <label for="password" class="form-label">Confirm Your Password</label>
+          <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" value="" id="confirmCheck" required>
+          <label class="form-check-label" for="confirmCheck">
+            I understand that this action is permanent and cannot be reversed.
+          </label>
+        </div>
+        <button type="submit" class="btn btn-danger w-100">Close My Account</button>
+      </form>
+
+      <div class="text-center mt-3">
+        <a href="{{ url_for('dashboard') }}">Cancel and return to Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

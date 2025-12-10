@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}My Loans - YourBank{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">My Loans</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Loan Applications</h5>
+        </div>
+        <div class="card-body">
+            {% if loan_applications %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Loan ID</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Interest Rate</th>
+                                <th>Tenure</th>
+                                <th>EMI</th>
+                                <th>Status</th>
+                                <th>Applied Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for loan in loan_applications %}
+                            <tr>
+                                <td><strong>{{ loan.loan_id }}</strong></td>
+                                <td>
+                                    <span class="badge badge-info">{{ loan.loan_type }}</span>
+                                </td>
+                                <td>₹{{ "{:,}".format(loan.loan_amount) }}</td>
+                                <td>{{ loan.interest_rate }}%</td>
+                                <td>{{ loan.tenure_months }} months</td>
+                                <td>₹{{ "{:,}".format(loan.monthly_emi) }}</td>
+                                <td>
+                                    {% if loan.status == 'APPROVED' %}
+                                        <span class="badge badge-success">{{ loan.status }}</span>
+                                    {% elif loan.status == 'REJECTED' %}
+                                        <span class="badge badge-danger">{{ loan.status }}</span>
+                                        {% if loan.rejection_reason %}
+                                            <br><small class="text-muted">{{ loan.rejection_reason[:50] }}...</small>
+                                        {% endif %}
+                                    {% elif loan.status == 'DISBURSED' %}
+                                        <span class="badge badge-primary">{{ loan.status }}</span>
+                                    {% elif loan.status == 'UNDER_REVIEW' %}
+                                        <span class="badge badge-info">{{ loan.status }}</span>
+                                    {% else %}
+                                        <span class="badge badge-warning">{{ loan.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ loan.created_at.strftime('%d-%m-%Y') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No loan applications found.</p>
+                    <a href="{{ url_for('loans') }}" class="btn btn-primary">Apply for a Loan</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Active Loan Accounts</h5>
+        </div>
+        <div class="card-body">
+            {% if loan_accounts %}
+                <div class="row">
+                    {% for loan in loan_accounts %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card border-left-primary">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            {{ loan.loan_type }} Loan
+                                        </div>
+                                        <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                            {{ loan.loan_id }}
+                                        </div>
+                                        <div class="mt-2">
+                                            <small class="text-muted">
+                                                <strong>Outstanding:</strong> ₹{{ "{:,}".format(loan.outstanding_balance) }}<br>
+                                                <strong>Monthly EMI:</strong> ₹{{ "{:,}".format(loan.monthly_emi) }}<br>
+                                                <strong>Next EMI:</strong> {{ loan.next_emi_date.strftime('%d-%m-%Y') }}<br>
+                                                <strong>Interest Rate:</strong> {{ loan.interest_rate }}% p.a.
+                                            </small>
+                                        </div>
+                                        <div class="mt-2">
+                                            <span class="badge badge-{{ 'success' if loan.status == 'ACTIVE' else 'secondary' }}">
+                                                {{ loan.status }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-university fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No active loan accounts found.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-plus-circle fa-2x text-primary mb-2"></i>
+                    <h6>Apply New Loan</h6>
+                    <a href="{{ url_for('loans') }}" class="btn btn-primary btn-sm">Apply Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-calculator fa-2x text-success mb-2"></i>
+                    <h6>EMI Calculator</h6>
+                    <button class="btn btn-success btn-sm" onclick="showEMICalculator()">Calculate</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-download fa-2x text-info mb-2"></i>
+                    <h6>Loan Statement</h6>
+                    <button class="btn btn-info btn-sm" onclick="downloadStatement()">Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h6 class="mb-0">🧪 Testing Tools (Admin Only)</h6>
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted">Simulate the 24-48 hour loan processing delay for testing purposes.</p>
+                    <div class="loan-applications">
+                        {% if applications %}
+                            {% for app in applications %}
+                                {% if app.status == 'PENDING' %}
+                                <div class="loan-item mb-3">
+                                    <h6>{{ app.loan_type }} - ₹{{ app.loan_amount|format_currency }}</h6>
+                                    <p class="text-muted small">Status: {{ app.status }}</p>
+                                    <form method="POST" action="{{ url_for('simulate_loan_processing', application_id=app.id) }}" style="display:inline;">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                        <button type="submit" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-cog"></i> Process Application
+                                        </button>
+                                    </form>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No pending applications</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="emiCalculatorModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">EMI Calculator</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Loan Amount (₹)</label>
+                    <input type="number" class="form-control" id="calc_amount" placeholder="Enter loan amount">
+                </div>
+                <div class="form-group">
+                    <label>Interest Rate (% p.a.)</label>
+                    <input type="number" class="form-control" id="calc_rate" placeholder="Enter interest rate" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label>Tenure (Months)</label>
+                    <input type="number" class="form-control" id="calc_tenure" placeholder="Enter tenure in months">
+                </div>
+                <button class="btn btn-primary" onclick="calculateEMI()">Calculate EMI</button>
+                <div id="emi_result" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showEMICalculator() {
+    $('#emiCalculatorModal').modal('show');
+}
+
+function calculateEMI() {
+    const amount = parseFloat(document.getElementById('calc_amount').value);
+    const rate = parseFloat(document.getElementById('calc_rate').value);
+    const tenure = parseInt(document.getElementById('calc_tenure').value);
+    
+    if (amount && rate && tenure) {
+        const monthlyRate = rate / (12 * 100);
+        const emi = Math.round(amount * monthlyRate * Math.pow(1 + monthlyRate, tenure) / (Math.pow(1 + monthlyRate, tenure) - 1));
+        const totalAmount = emi * tenure;
+        const totalInterest = totalAmount - amount;
+        
+        document.getElementById('emi_result').innerHTML = `
+            <div class="alert alert-success">
+                <strong>EMI Calculation Result:</strong><br>
+                Monthly EMI: ₹${emi.toLocaleString()}<br>
+                Total Amount Payable: ₹${totalAmount.toLocaleString()}<br>
+                Total Interest: ₹${totalInterest.toLocaleString()}
+            </div>
+        `;
+    } else {
+        document.getElementById('emi_result').innerHTML = `
+            <div class="alert alert-danger">
+                Please fill all fields with valid values.
+            </div>
+        `;
+    }
+}
+
+function downloadStatement() {
+    alert('Loan statement download feature will be available soon.');
+}
+</script>
+{% endblock %}

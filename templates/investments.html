@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+
+{% block title %}Investments - YourBank{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">📊 My Investments Dashboard</h2>
+            
+            <!-- Investment Summary Cards -->
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <h6 class="card-title">Total FD Amount</h6>
+                            <h4>₹{{ "%.2f"|format(total_fd) }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <h6 class="card-title">Total RD Amount</h6>
+                            <h4>₹{{ "%.2f"|format(total_rd) }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <h6 class="card-title">Total Investments</h6>
+                            <h4>₹{{ "%.2f"|format(total_investments) }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-dark">
+                        <div class="card-body">
+                            <h6 class="card-title">Total Returns</h6>
+                            <h4>₹{{ "%.2f"|format(total_returns) }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <a href="{{ url_for('invest') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Invest Now
+            </a>
+            <a href="{{ url_for('fixed_deposit') }}" class="btn btn-success">
+                <i class="fas fa-piggy-bank"></i> Create Fixed Deposit
+            </a>
+            <a href="{{ url_for('recurring_deposit') }}" class="btn btn-info">
+                <i class="fas fa-calendar-check"></i> Create Recurring Deposit
+            </a>
+        </div>
+    </div>
+
+    <!-- Investments Tab -->
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">💼 Mutual Funds & Stocks</h5>
+        </div>
+        <div class="card-body">
+            {% if investments %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Investment ID</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Current Value</th>
+                            <th>Profit/Loss</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inv in investments %}
+                        <tr>
+                            <td><strong>{{ inv.investment_id }}</strong></td>
+                            <td>{{ inv.investment_type }}</td>
+                            <td>₹{{ "%.2f"|format(inv.amount) }}</td>
+                            <td>₹{{ "%.2f"|format(inv.current_value|default(inv.amount, true)) }}</td>
+                            <td>
+                                {% set profit_loss = inv.profit_loss|default(0, true) %}
+                                {% if profit_loss >= 0 %}
+                                    <span class="badge bg-success">+₹{{ "%.2f"|format(profit_loss) }}</span>
+                                {% else %}
+                                    <span class="badge bg-danger">-₹{{ "%.2f"|format(-profit_loss) }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ inv.invested_at.strftime('%d-%b-%Y') }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('liquidate_investment', investment_id=inv.id) }}" style="display:inline;">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                    <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Liquidate this investment?')">
+                                        <i class="fas fa-cash-register"></i> Liquidate
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No active investments. <a href="{{ url_for('invest') }}">Start investing now!</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Fixed Deposits Tab -->
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">🏦 Fixed Deposits</h5>
+        </div>
+        <div class="card-body">
+            {% if fixed_deposits %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>FD ID</th>
+                            <th>Principal</th>
+                            <th>Rate</th>
+                            <th>Maturity Amount</th>
+                            <th>Maturity Date</th>
+                            <th>Days Left</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fd in fixed_deposits %}
+                        <tr>
+                            <td><strong>{{ fd.fd_id }}</strong></td>
+                            <td>₹{{ "%.2f"|format(fd.principal_amount) }}</td>
+                            <td>{{ fd.interest_rate }}% p.a.</td>
+                            <td>₹{{ "%.2f"|format(fd.maturity_amount) }}</td>
+                            <td>{{ fd.maturity_date.strftime('%d-%b-%Y') }}</td>
+                            <td>
+                                {% set days_left = (fd.maturity_date.date() - now.date()).days %}
+                                {% if days_left > 0 %}
+                                    <span class="badge bg-info">{{ days_left }} days</span>
+                                {% else %}
+                                    <span class="badge bg-success">Matured</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No active FDs. <a href="{{ url_for('fixed_deposit') }}">Create one now!</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recurring Deposits Tab -->
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">📅 Recurring Deposits</h5>
+        </div>
+        <div class="card-body">
+            {% if recurring_deposits %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>RD ID</th>
+                            <th>Monthly Amount</th>
+                            <th>Tenure</th>
+                            <th>Total Paid</th>
+                            <th>Maturity Amount</th>
+                            <th>Maturity Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rd in recurring_deposits %}
+                        <tr>
+                            <td><strong>{{ rd.rd_id }}</strong></td>
+                            <td>₹{{ "%.2f"|format(rd.monthly_amount) }}</td>
+                            <td>{{ rd.tenure_months }} months</td>
+                            <td>₹{{ "%.2f"|format(rd.total_paid) }}</td>
+                            <td>₹{{ "%.2f"|format(rd.maturity_amount) }}</td>
+                            <td>{{ rd.maturity_date.strftime('%d-%b-%Y') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No active RDs. <a href="{{ url_for('recurring_deposit') }}">Create one now!</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

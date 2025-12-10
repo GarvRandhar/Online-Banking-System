@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard | SecureBank Pro{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="page-title">Admin Dashboard</h1>
+      <p class="page-subtitle">System Statistics & Analytics</p>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="stat-icon primary">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="ms-3">
+              <h6 class="text-muted mb-1">Total Users</h6>
+              <h3 class="mb-0">{{ stats.total_users }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="stat-icon success">
+              <i class="fas fa-wallet"></i>
+            </div>
+            <div class="ms-3">
+              <h6 class="text-muted mb-1">Total Deposits</h6>
+              <h3 class="mb-0">₹{{ stats.total_deposits | format_currency }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="stat-icon danger">
+              <i class="fas fa-hand-holding-usd"></i>
+            </div>
+            <div class="ms-3">
+              <h6 class="text-muted mb-1">Active Loans</h6>
+              <h3 class="mb-0">{{ stats.active_loans }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="stat-icon warning">
+              <i class="fas fa-exchange-alt"></i>
+            </div>
+            <div class="ms-3">
+              <h6 class="text-muted mb-1">Today Transactions</h6>
+              <h3 class="mb-0">{{ stats.today_transactions }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Transaction Chart -->
+    <div class="col-lg-6">
+      <div class="card border-0 shadow">
+        <div class="card-header bg-light border-bottom">
+          <h5 class="mb-0">Daily Transactions</h5>
+        </div>
+        <div class="card-body">
+          <canvas id="transactionChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Revenue Chart -->
+    <div class="col-lg-6">
+      <div class="card border-0 shadow">
+        <div class="card-header bg-light border-bottom">
+          <h5 class="mb-0">Monthly Revenue</h5>
+        </div>
+        <div class="card-body">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Management Table -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card border-0 shadow">
+        <div class="card-header bg-light border-bottom d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Recent Users</h5>
+          <a href="#" class="btn btn-sm btn-primary">View All</a>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr class="bg-light">
+                <th>Account Number</th>
+                <th>Name</th>
+                <th>Account Type</th>
+                <th>Balance</th>
+                <th>Created</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for account in recent_accounts %}
+              <tr>
+                <td><code>{{ account.acno }}</code></td>
+                <td>{{ account.name }}</td>
+                <td><span class="badge bg-info">{{ account.account_type }}</span></td>
+                <td>₹{{ account.balance | format_currency }}</td>
+                <td>{{ account.created_at.strftime('%d-%m-%Y') }}</td>
+                <td>
+                  <button class="btn btn-xs btn-info" onclick="viewAccount('{{ account.acno }}')">View</button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Transaction Chart
+const transactionCtx = document.getElementById('transactionChart').getContext('2d');
+new Chart(transactionCtx, {
+  type: 'line',
+  data: {
+    labels: {{ transaction_labels | safe }},
+    datasets: [{
+      label: 'Transactions',
+      data: {{ transaction_data | safe }},
+      borderColor: '#007bff',
+      backgroundColor: 'rgba(0, 123, 255, 0.1)',
+      tension: 0.4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: true }
+    }
+  }
+});
+
+// Revenue Chart
+const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+new Chart(revenueCtx, {
+  type: 'bar',
+  data: {
+    labels: {{ revenue_labels | safe }},
+    datasets: [{
+      label: 'Revenue (₹)',
+      data: {{ revenue_data | safe }},
+      backgroundColor: '#28a745'
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false }
+    }
+  }
+});
+
+function viewAccount(acno) {
+  window.location.href = `/admin/account/${acno}`;
+}
+</script>
+{% endblock %}

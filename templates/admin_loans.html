@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Loan Management{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">🏦 Loan Management Dashboard</h2>
+    
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center bg-info text-white">
+                <div class="card-body">
+                    <h3>{{ stats.under_review }}</h3>
+                    <p>Under Review</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-success text-white">
+                <div class="card-body">
+                    <h3>{{ stats.approved }}</h3>
+                    <p>Approved</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-danger text-white">
+                <div class="card-body">
+                    <h3>{{ stats.rejected }}</h3>
+                    <p>Rejected</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-primary text-white">
+                <div class="card-body">
+                    <h3>{{ stats.disbursed }}</h3>
+                    <p>Disbursed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">All Loan Applications</h5>
+            <div class="float-right">
+                <a href="{{ url_for('process_pending_loans') }}" class="btn btn-warning btn-sm">
+                    Process Pending Loans
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if loan_applications %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>Loan ID</th>
+                                <th>Customer</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Applied Date</th>
+                                <th>Credit Score</th>
+                                <th>Existing Loans</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for loan in loan_applications %}
+                            <tr>
+                                <td><strong>{{ loan.loan_id }}</strong></td>
+                                <td>{{ loan.name }}<br><small class="text-muted">{{ loan.acno }}</small></td>
+                                <td><span class="badge badge-info">{{ loan.loan_type }}</span></td>
+                                <td>₹{{ "{:,}".format(loan.loan_amount) }}</td>
+                                <td>
+                                    {% if loan.status == 'APPROVED' %}
+                                        <span class="badge badge-success">{{ loan.status }}</span>
+                                    {% elif loan.status == 'REJECTED' %}
+                                        <span class="badge badge-danger">{{ loan.status }}</span>
+                                    {% elif loan.status == 'UNDER_REVIEW' %}
+                                        <span class="badge badge-warning">{{ loan.status }}</span>
+                                    {% else %}
+                                        <span class="badge badge-primary">{{ loan.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ loan.created_at.strftime('%d-%m-%Y %H:%M') }}</td>
+                                <td>
+                                    {% if loan.credit_score %}
+                                        <span class="badge badge-{{ 'success' if loan.credit_score >= 650 else 'danger' }}">
+                                            {{ loan.credit_score }}
+                                        </span>
+                                    {% else %}
+                                        <span class="text-muted">N/A</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ loan.existing_loans or 0 }}</td>
+                                <td>
+                                    {% if loan.status == 'UNDER_REVIEW' %}
+                                        <button class="btn btn-success btn-xs" onclick="processLoan('{{ loan.id }}', 'approve')">
+                                            Approve
+                                        </button>
+                                        <button class="btn btn-danger btn-xs" onclick="processLoan('{{ loan.id }}', 'reject')">
+                                            Reject
+                                        </button>
+                                    {% elif loan.status == 'REJECTED' and loan.rejection_reason %}
+                                        <button class="btn btn-info btn-xs" onclick="showRejectionReason('{{ loan.rejection_reason }}')">
+                                            View Reason
+                                        </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No loan applications found.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function processLoan(loanId, action) {
+    if (confirm(`Are you sure you want to ${action} this loan?`)) {
+        // In a real system, this would make an AJAX call to process the loan
+        alert(`Loan ${action} functionality would be implemented here.`);
+    }
+}
+
+function showRejectionReason(reason) {
+    alert('Rejection Reason:\n\n' + reason);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply for Loan - YourBank{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="dashboard-card">
+                <h2 class="mb-4 fw-bold text-gradient">
+                    <i class="fas fa-hand-holding-usd"></i> Apply for Loan
+                </h2>
+
+                <form method="POST" class="needs-validation">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                    <div class="mb-4">
+                        <label for="loan_type" class="form-label fw-bold">Loan Type *</label>
+                        <select class="form-select" id="loan_type" name="loan_type" required>
+                            <option value="">-- Select Loan Type --</option>
+                            <option value="personal">Personal Loan</option>
+                            <option value="home">Home Loan</option>
+                            <option value="business">Business Loan</option>
+                            <option value="education">Education Loan</option>
+                            <option value="auto">Auto Loan</option>
+                        </select>
+                        <div class="form-text">Choose the type of loan you need</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="loan_amount" class="form-label fw-bold">Loan Amount (₹) *</label>
+                        <input type="number" class="form-control" id="loan_amount" name="loan_amount" 
+                               placeholder="e.g., 100000" min="10000" required>
+                        <div class="form-text">Minimum loan amount: ₹10,000</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="tenure_months" class="form-label fw-bold">Tenure (Months) *</label>
+                        <input type="number" class="form-control" id="tenure_months" name="tenure_months" 
+                               placeholder="e.g., 12" min="6" max="360" required>
+                        <div class="form-text">Loan period in months (6 - 360)</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="interest_rate" class="form-label fw-bold">Interest Rate (% p.a.) *</label>
+                        <input type="number" class="form-control" id="interest_rate" name="interest_rate" 
+                               placeholder="e.g., 12" min="5" max="25" step="0.5" value="12.0" required>
+                        <div class="form-text">Annual percentage rate (APR)</div>
+                    </div>
+
+                    <div class="alert alert-info" id="loanPreview" style="display:none;">
+                        <h6 class="fw-bold">Loan Summary</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Loan Amount:</strong> <span id="previewAmount">₹0</span></p>
+                                <p><strong>Tenure:</strong> <span id="previewTenure">0</span> months</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Interest Rate:</strong> <span id="previewRate">0</span>% p.a.</p>
+                                <p><strong>Estimated EMI:</strong> <span id="previewEmi">₹0</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="terms_agreed" name="terms_agreed" required>
+                            <label class="form-check-label" for="terms_agreed">
+                                I agree to the <strong>terms and conditions</strong> and authorize YourBank to process my application
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-sm-flex">
+                        <button type="submit" class="btn btn-gradient btn-lg">
+                            <i class="fas fa-paper-plane"></i> Submit Application
+                        </button>
+                        <a href="{{ url_for('loans') }}" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="row g-4 mt-4">
+                <div class="col-md-6">
+                    <div class="dashboard-card text-center">
+                        <i class="fas fa-home fa-2x mb-3" style="color: #667eea;"></i>
+                        <h6 class="fw-bold">Home Loan</h6>
+                        <p class="text-muted small">From 6.5% p.a. | Up to 25 years</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="dashboard-card text-center">
+                        <i class="fas fa-user fa-2x mb-3" style="color: #10b981;"></i>
+                        <h6 class="fw-bold">Personal Loan</h6>
+                        <p class="text-muted small">From 10% p.a. | Up to 5 years</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="dashboard-card text-center">
+                        <i class="fas fa-briefcase fa-2x mb-3" style="color: #f59e0b;"></i>
+                        <h6 class="fw-bold">Business Loan</h6>
+                        <p class="text-muted small">From 9% p.a. | Up to 7 years</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="dashboard-card text-center">
+                        <i class="fas fa-book fa-2x mb-3" style="color: #ec4899;"></i>
+                        <h6 class="fw-bold">Education Loan</h6>
+                        <p class="text-muted small">From 8% p.a. | Up to 15 years</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function calculateEMI() {
+    const principal = parseFloat(document.getElementById('loan_amount').value) || 0;
+    const tenure = parseFloat(document.getElementById('tenure_months').value) || 0;
+    const rate = parseFloat(document.getElementById('interest_rate').value) || 12;
+
+    if (principal > 0 && tenure > 0 && rate > 0) {
+        const monthlyRate = rate / 100 / 12;
+        const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, tenure)) / 
+                    (Math.pow(1 + monthlyRate, tenure) - 1);
+        
+        document.getElementById('previewAmount').textContent = '₹' + principal.toLocaleString('en-IN', {maximumFractionDigits: 0});
+        document.getElementById('previewTenure').textContent = tenure;
+        document.getElementById('previewRate').textContent = rate;
+        document.getElementById('previewEmi').textContent = '₹' + Math.round(emi).toLocaleString('en-IN');
+        document.getElementById('loanPreview').style.display = 'block';
+    }
+}
+
+document.getElementById('loan_amount').addEventListener('input', calculateEMI);
+document.getElementById('tenure_months').addEventListener('input', calculateEMI);
+document.getElementById('interest_rate').addEventListener('input', calculateEMI);
+</script>
+{% endblock %}

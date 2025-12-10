@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Current Account Information{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    {% if account_type == 'regular' %}
+        <h2>Regular Current Account - Details</h2>
+        <ul class="mt-4">
+            <li>Monthly account balance: <b>₹50,000</b></li>
+            <li>Free cash deposit up to <b>₹18,00,000</b> per month</li>
+            <li>Withdraw & deposit cash at all branches</li>
+            <li>Free access to safest, securest and fastest internet banking</li>
+            <li>Free <b>20 Demand Drafts</b> per month</li>
+            <li><b>Quarterly charges: ₹1,000</b></li>
+        </ul>
+    {% elif account_type == 'premium' %}
+        <h2>Premium Current Account - Details</h2>
+        <ul class="mt-4">
+            <li>Monthly account balance: <b>₹35,00,000</b></li>
+            <li>Free cash deposit up to <b>₹5,00,00,000</b> per month</li>
+            <li>Unlimited free cash withdrawal from home branch</li>
+            <li>Unlimited free Demand Drafts/Banker Cheques</li>
+            <li><b>Quarterly charges: ₹300</b></li>
+        </ul>
+    {% endif %}
+    <a href="{{ url_for('apply_current_account') }}" class="btn btn-secondary mt-4">Back</a>
+    <a href="{{ url_for('current_account_apply', account_type=account_type) }}" class="btn btn-primary mt-4 ms-2">Apply Now</a>
+</div>
+{% endblock %}

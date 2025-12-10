@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}My Credit Cards{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>My Credit Cards</h2>
+        <a href="{{ url_for('apply_credit_card') }}" class="btn btn-primary">Apply New Card</a>
+    </div>
+
+    {% if credit_cards %}
+        <div class="row">
+            {% for card in credit_cards %}
+            <div class="col-md-6 mb-4">
+                <div class="card" style="min-height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5 class="card-title">{{ card.card_type }} Card</h5>
+                            <span class="badge bg-light text-dark">{{ card.status }}</span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <p class="mb-2">Card Number</p>
+                            <h4 class="font-monospace">{{ card.card_number[:4] }} **** **** {{ card.card_number[-4:] }}</h4>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <p class="text-white-50 mb-1">Card Holder</p>
+                                <p class="mb-0">Your Name</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="text-white-50 mb-1">Valid Thru</p>
+                                <p class="mb-0">{{ card.expiry_date }}</p>
+                            </div>
+                        </div>
+
+                        <hr class="bg-white-50">
+
+                        <div class="mb-4">
+                            <p class="text-white-50 mb-1">Credit Limit</p>
+                            <h5>₹{{ card.credit_limit|format_currency }}</h5>
+                        </div>
+
+                        <div class="mb-4">
+                            <p class="text-white-50 mb-1">Available Balance</p>
+                            <h5>₹{{ card.available_balance|format_currency }}</h5>
+                        </div>
+
+                        <div class="mb-4">
+                            <p class="text-white-50 mb-1">Outstanding Balance</p>
+                            <h5>₹{{ card.outstanding_balance|format_currency }}</h5>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('credit_card_view', card_id=card.id) }}" class="btn btn-light btn-sm">Manage Card</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">No Credit Cards Yet</h4>
+            <p>You don't have any credit cards. Click the button above to apply for one.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

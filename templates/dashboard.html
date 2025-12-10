@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - YourBank{% endblock %}
+
+{% block content %}
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="mb-2">Welcome back, <span class="text-gradient">{{ username }}!</span></h1>
+            <p class="text-muted">Here's an overview of your account and activities</p>
+        </div>
+        <div>
+            <p class="text-muted mb-0">
+                <i class="fas fa-calendar"></i>
+                <span id="currentDate"></span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="stats-grid mb-5">
+    <div class="stat-card">
+        <h6>Account Balance</h6>
+        <div class="value text-gradient">₹{{ account_balance|format_currency }}</div>
+        <small class="text-muted">
+            <i class="fas fa-info-circle"></i> Current balance
+        </small>
+    </div>
+    <div class="stat-card">
+        <h6>Monthly Spending</h6>
+        <div class="value" style="color: #ef4444;">₹{{ monthly_spending|format_currency }}</div>
+        <small class="text-muted">
+            <i class="fas fa-calendar"></i> This month
+        </small>
+    </div>
+    <div class="stat-card">
+        <h6>Available Credit</h6>
+        <div class="value" style="color: #10b981;">₹{{ (account_balance * 0.5)|format_currency }}</div>
+        <small class="text-muted">
+            <i class="fas fa-lock"></i> 50% of balance
+        </small>
+    </div>
+    <div class="stat-card">
+        <h6>Total Transactions</h6>
+        <div class="value" style="color: #667eea;">{{ transactions|length }}</div>
+        <small class="text-muted">
+            <i class="fas fa-exchange-alt"></i> Recent activity
+        </small>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="dashboard-card mb-4">
+            <h4 class="mb-4 fw-bold">
+                <i class="fas fa-lightning"></i> Quick Actions
+            </h4>
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <a href="{{ url_for('deposit') }}" class="btn btn-gradient w-100 h-100" style="padding: 1.5rem;">
+                        <div class="text-center">
+                            <i class="fas fa-arrow-down fa-2x mb-2"></i>
+                            <div>Deposit</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6">
+                    <a href="{{ url_for('withdraw') }}" class="btn btn-gradient w-100 h-100" style="padding: 1.5rem;">
+                        <div class="text-center">
+                            <i class="fas fa-arrow-up fa-2x mb-2"></i>
+                            <div>Withdraw</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6">
+                    <a href="{{ url_for('transfer') }}" class="btn btn-gradient w-100 h-100" style="padding: 1.5rem;">
+                        <div class="text-center">
+                            <i class="fas fa-exchange-alt fa-2x mb-2"></i>
+                            <div>Transfer</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6">
+                    <a href="{{ url_for('apply_credit_card') }}" class="btn btn-gradient w-100 h-100" style="padding: 1.5rem;">
+                        <div class="text-center">
+                            <i class="fas fa-credit-card fa-2x mb-2"></i>
+                            <div>Apply Card</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <h4 class="mb-4 fw-bold">
+                <i class="fas fa-history"></i> Recent Transactions
+            </h4>
+            
+            {% if transactions %}
+                {% for txn in transactions[:4] %}
+                <div class="transaction-item">
+                    <div class="transaction-icon">
+                        {% if 'DEPOSIT' in txn.transaction_type or 'CREDIT' in txn.transaction_type %}
+                            <i class="fas fa-arrow-down" style="color: #10b981;"></i>
+                        {% else %}
+                            <i class="fas fa-arrow-up" style="color: #ef4444;"></i>
+                        {% endif %}
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-type">{{ txn.transaction_type }}</div>
+                        <div class="transaction-date">{{ txn.timestamp.strftime('%d %b %Y at %I:%M %p') }}</div>
+                    </div>
+                    <div class="transaction-amount {% if 'DEPOSIT' in txn.transaction_type or 'CREDIT' in txn.transaction_type %}credit{% else %}debit{% endif %}">
+                        {% if 'DEPOSIT' in txn.transaction_type or 'CREDIT' in txn.transaction_type %}
+                            +₹{{ txn.amount|format_currency }}
+                        {% else %}
+                            -₹{{ txn.amount|format_currency }}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted text-center py-4">No transactions yet</p>
+            {% endif %}
+
+            <div class="text-center pt-3">
+                <a href="{{ url_for('transactions') }}" class="btn btn-outline-primary">
+                    View All Transactions <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        {% if debit_cards %}
+        <div class="credit-card mb-4">
+            <div class="credit-card-chip"></div>
+            <div class="credit-card-number">
+                {{ debit_cards[0].card_number[:4] }} •••• •••• {{ debit_cards[0].card_number[-4:] }}
+            </div>
+            <div class="credit-card-footer">
+                <div>
+                    <small style="opacity: 0.8; text-transform: uppercase; font-size: 0.7rem;">Card Holder</small>
+                    <div class="credit-card-holder" style="font-weight: 600; margin-top: 0.3rem;">{{ username }}</div>
+                </div>
+                <div class="text-end">
+                    <small style="opacity: 0.8; text-transform: uppercase; font-size: 0.7rem;">Valid Thru</small>
+                    <div class="credit-card-holder" style="font-weight: 600; margin-top: 0.3rem;">{{ debit_cards[0].expiry_date }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-2 mb-4">
+            <div class="col-6">
+                <a href="{{ url_for('debit_card_view', card_id=debit_cards[0].id) }}" class="btn btn-outline-primary btn-sm w-100">
+                    <i class="fas fa-wallet"></i> Use Card
+                </a>
+            </div>
+            <div class="col-6">
+                <a href="{{ url_for('debit_card_change_password', card_id=debit_cards[0].id) }}" class="btn btn-outline-secondary btn-sm w-100">
+                    <i class="fas fa-lock"></i> Change PIN
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="dashboard-card mb-4">
+            <h5 class="fw-bold mb-4">
+                <i class="fas fa-user-circle"></i> Account Information
+            </h5>
+            <div class="mb-3">
+                <small class="text-muted d-block mb-1">Account Type</small>
+                <strong>Savings Account</strong>
+            </div>
+            <div class="mb-3">
+                <small class="text-muted d-block mb-1">Account Status</small>
+                <span class="badge" style="background: linear-gradient(135deg, #10b981, #34d399); color: white;">
+                    <i class="fas fa-check-circle"></i> Active
+                </span>
+            </div>
+            <div class="mb-3">
+                <small class="text-muted d-block mb-1">Interest Rate</small>
+                <strong>4.0% p.a.</strong>
+            </div>
+            <a href="{{ url_for('account_details') }}" class="btn btn-outline-primary w-100">
+                <i class="fas fa-eye"></i> View Details
+            </a>
+        </div>
+
+        <div class="dashboard-card">
+            <h5 class="fw-bold mb-4">
+                <i class="fas fa-star"></i> Explore More
+            </h5>
+            <div class="d-grid gap-2">
+                <a href="{{ url_for('fixed_deposit') }}" class="btn btn-light btn-sm text-start">
+                    <i class="fas fa-certificate"></i> Fixed Deposits
+                </a>
+                <a href="{{ url_for('recurring_deposit') }}" class="btn btn-light btn-sm text-start">
+                    <i class="fas fa-sync-alt"></i> Recurring Deposits
+                </a>
+                <a href="{{ url_for('investments') }}" class="btn btn-light btn-sm text-start">
+                    <i class="fas fa-chart-pie"></i> Investments
+                </a>
+                <a href="{{ url_for('loans') }}" class="btn btn-light btn-sm text-start">
+                    <i class="fas fa-hand-holding-usd"></i> Apply for Loan
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h4 class="fw-bold mb-4">
+        <i class="fas fa-gift"></i> Special Offers for You
+    </h4>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="dashboard-card border-start" style="border-left: 4px solid #667eea;">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h6 class="fw-bold">Credit Card Offer</h6>
+                    <span class="badge bg-danger">HOT</span>
+                </div>
+                <p class="text-muted mb-3">Get approved instantly with up to ₹10,00,000 credit limit.</p>
+                <a href="{{ url_for('apply_credit_card') }}" class="btn btn-sm btn-gradient">Apply Now</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dashboard-card border-start" style="border-left: 4px solid #10b981;">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h6 class="fw-bold">Fixed Deposit Bonus</h6>
+                    <span class="badge bg-success">NEW</span>
+                </div>
+                <p class="text-muted mb-3">Earn up to 6.5% interest on your fixed deposits.</p>
+                <a href="{{ url_for('fixed_deposit') }}" class="btn btn-sm btn-gradient">Learn More</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dashboard-card border-start" style="border-left: 4px solid #f59e0b;">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h6 class="fw-bold">Referral Program</h6>
+                    <span class="badge bg-warning">EARN</span>
+                </div>
+                <p class="text-muted mb-3">Refer a friend and earn ₹500 bonus instantly.</p>
+                <a href="#" class="btn btn-sm btn-gradient">Share Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="balance-card">
+    <h5>Account Balance</h5>
+    <p class="balance-amount">₹{{ account_balance|format_currency }}</p>
+</div>
+
+<div class="spending-card">
+    <p>Monthly Spending: ₹{{ monthly_spending|format_currency }}</p>
+</div>
+
+<div class="transactions-list">
+    {% if transactions %}
+        {% for txn in transactions %}
+        <div class="transaction-item">
+            <span class="txn-type">{{ txn.transaction_type }}</span>
+            <span class="txn-amount">₹{{ txn.amount|format_currency }}</span>
+            <small class="txn-date">{{ txn.timestamp.strftime('%d-%b-%Y %H:%M') }}</small>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">No transactions yet</p>
+    {% endif %}
+</div>
+
+<script>
+document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+});
+</script>
+{% endblock %}

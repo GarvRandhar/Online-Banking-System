@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Credit Card Purchase - YourBank{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">🛍️ Make Credit Card Purchase</h4>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'error' else 'success' if category == 'success' else 'info' }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <div class="alert alert-light border mb-4">
+                        <h6><i class="fas fa-credit-card"></i> Card Details</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <small class="text-muted">Card</small>
+                                <p class="fw-bold">****{{ credit_card.card_number[-4:] }} - {{ credit_card.card_type|title }}</p>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted">Credit Limit</small>
+                                <p class="fw-bold">₹{{ "%.2f"|format(credit_card.credit_limit) }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6">
+                                <small class="text-muted">Amount Owed</small>
+                                <p class="fw-bold text-danger">₹{{ "%.2f"|format(credit_card.current_balance) }}</p>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted">Available Credit</small>
+                                <p class="fw-bold text-success">₹{{ "%.2f"|format(credit_card.available_credit) }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('credit_card_purchase', card_id=credit_card.id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        
+                        <div class="form-group mb-3">
+                            <label for="merchant_name" class="form-label">Merchant/Store Name</label>
+                            <input type="text" class="form-control" id="merchant_name" name="merchant_name" 
+                                   placeholder="e.g., Amazon, Flipkart, Big Bazaar, etc." required>
+                            <small class="text-muted">Enter the name of the merchant or store</small>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="purchase_amount" class="form-label">Purchase Amount (₹)</label>
+                            <input type="number" class="form-control" id="purchase_amount" name="purchase_amount" 
+                                   placeholder="Enter purchase amount" min="1" step="1" required>
+                            <small class="text-muted">Maximum you can spend: ₹{{ "%.2f"|format(credit_card.available_credit) }}</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <small class="text-muted">Credit Usage Status</small>
+                            <div class="progress" style="height: 10px;">
+                                {% set used_percent = (credit_card.current_balance / credit_card.credit_limit) * 100 %}
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: {{ used_percent }}%" aria-valuenow="{{ used_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <small class="text-muted">Used: ₹{{ "%.2f"|format(credit_card.current_balance) }}</small>
+                                <small class="text-muted">Available: ₹{{ "%.2f"|format(credit_card.available_credit) }}</small>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info" role="alert">
+                            <strong><i class="fas fa-info-circle"></i> How Credit Card Purchases Work:</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>💳 Purchase amount is added to your credit card balance</li>
+                                <li>📊 Your available credit decreases accordingly</li>
+                                <li>📧 You'll receive a transaction notification</li>
+                                <li>💰 You can pay the balance anytime from your savings account</li>
+                                <li>⏰ No interest if paid within the billing cycle</li>
+                            </ul>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-shopping-cart"></i> Confirm Purchase
+                            </button>
+                            <a href="{{ url_for('my_credit_cards') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Cards
+                            </a>
+                        </div>
+                    </form>
+
+                    <hr>
+                    <div class="alert alert-light border-left border-success">
+                        <h6 class="text-success"><i class="fas fa-lightbulb"></i> Example:</h6>
+                        <small>
+                            If you have a credit limit of ₹1,00,000 and make a purchase of ₹10,000:
+                            <br>• Amount owed: ₹10,000
+                            <br>• Available credit: ₹90,000
+                            <br>• You can then pay ₹10,000 from your savings account
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

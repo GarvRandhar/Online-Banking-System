@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Invest Now - YourBank{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">💼 Invest Now</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('invest') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        
+                        <div class="form-group mb-3">
+                            <label for="investment_type" class="form-label">Investment Type</label>
+                            <select class="form-select" id="investment_type" name="investment_type" required>
+                                <option value="MUTUAL_FUND">Mutual Fund</option>
+                                <option value="STOCK">Stock</option>
+                                <option value="BOND">Bond</option>
+                                <option value="COMMODITY">Commodity</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="amount" class="form-label">Investment Amount (₹)</label>
+                            <input type="number" class="form-control" id="amount" name="amount" 
+                                   placeholder="Minimum: ₹5,000" min="5000" step="100" required>
+                            <small class="text-muted">Minimum investment: ₹5,000</small>
+                        </div>
+                        
+                        <div class="alert alert-info" role="alert">
+                            <strong>ℹ️ Investment Information:</strong>
+                            <ul class="mb-0 mt-2">
+                                <li><strong>Mutual Fund:</strong> 12% p.a. expected return</li>
+                                <li><strong>Stock:</strong> 15% p.a. expected return</li>
+                                <li><strong>Bond:</strong> 6% p.a. expected return</li>
+                                <li><strong>Commodity:</strong> 10% p.a. expected return</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-arrow-right"></i> Invest Now
+                            </button>
+                            <a href="{{ url_for('investments') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Investments
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

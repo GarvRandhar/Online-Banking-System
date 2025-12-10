@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Credit Card Statement - YourBank{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">📋 Credit Card Statement</h2>
+            
+            <!-- Card Info -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <small class="text-muted">Card Number</small>
+                            <p class="fw-bold">****{{ credit_card.card_number[-4:] }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <small class="text-muted">Card Type</small>
+                            <p class="fw-bold">{{ credit_card.card_type|title }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <small class="text-muted">Credit Limit</small>
+                            <p class="fw-bold">₹{{ "%.2f"|format(credit_card.credit_limit) }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <small class="text-muted">Available Credit</small>
+                            <p class="fw-bold text-success">₹{{ "%.2f"|format(credit_card.available_credit) }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions -->
+            {% if transactions %}
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Recent Transactions</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Merchant</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for txn in transactions %}
+                            <tr>
+                                <td>{{ txn.transaction_date.strftime('%d-%b-%Y %H:%M') }}</td>
+                                <td>
+                                    {% if txn.transaction_type == 'PAYMENT' %}
+                                        <span class="badge bg-success">Payment</span>
+                                    {% elif txn.transaction_type == 'PURCHASE' %}
+                                        <span class="badge bg-info">Purchase</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ txn.transaction_type }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ txn.merchant }}</td>
+                                <td>
+                                    {% if txn.transaction_type == 'PAYMENT' %}
+                                        <span class="text-success">-₹{{ "%.2f"|format(txn.amount) }}</span>
+                                    {% else %}
+                                        <span class="text-danger">+₹{{ "%.2f"|format(txn.amount) }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">{{ txn.status }}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle"></i> No transactions yet
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{{ url_for('my_credit_cards') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Cards
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
