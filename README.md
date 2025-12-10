@@ -55,7 +55,7 @@
 </td>
 </tr>
 <tr>
-<td width="50%">
+<td width="100%">
 
 ### 📈 Investments
 - 🏦 Fixed Deposits (FD)
@@ -65,7 +65,7 @@
 - 📧 Investment Notifications
 
 </td>
-<td width="50%">
+<td width="100%">
 
 ### 🔐 Security & More
 - 🔒 Two-Factor Authentication (2FA)
