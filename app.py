@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', '083r08BHHBHBIHVDBHI938')
-app.config['WTF_CSRF_ENABLED'] = False  
+app.config['WTF_CSRF_ENABLED'] = False  # Temporarily disable ALL CSRF
 csrf = CSRFProtect(app)
 csrf._exempt_views.add('home')
 
@@ -341,7 +341,7 @@ def send_email(to, subject, body, attachment=None):
     try:
         msg = EmailMessage()
         msg['Subject'] = subject
-        msg['From'] = os.environ.get('MAIL_USERNAME', 'your_email')
+        msg['From'] = os.environ.get('MAIL_USERNAME', 'garvboy21@gmail.com')
         msg['To'] = to
         msg.set_content(body)
 
@@ -353,8 +353,8 @@ def send_email(to, subject, body, attachment=None):
 
         with smtplib.SMTP('smtp.gmail.com', 587) as server:
             server.starttls()
-            server.login(os.environ.get('MAIL_USERNAME', 'your_email'), 
-                        os.environ.get('MAIL_PASSWORD', 'your_passwd'))
+            server.login(os.environ.get('MAIL_USERNAME', 'garvboy21@gmail.com'), 
+                        os.environ.get('MAIL_PASSWORD', 'kewx sknr pjsk phhw'))
             server.send_message(msg)
             logger.info(f"Email sent to {to}")
     except Exception as e:
@@ -1979,7 +1979,7 @@ def debit_card_change_password(card_id):
 
 @app.route('/apply_current_account', methods=['GET'])
 @csrf.exempt
-def apply_current_account_redirect():
+def apply_current_account():
     """Redirect to current account application selection"""
     return render_template('apply_current_account.html', csrf_token=generate_csrf())
 
@@ -3673,5 +3673,4 @@ if __name__ == '__main__':
     print("\n   Local: http://127.0.0.1:5001")
     print("\n" + "="*60 + "\n")
     
-
     app.run(debug=True, host='0.0.0.0', port=5001, use_reloader=False)
