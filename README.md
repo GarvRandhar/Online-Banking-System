@@ -136,7 +136,7 @@
 </td>
 <td width="33%">
 <img src="https://github.com/user-attachments/assets/c3809e66-78b6-4a56-9c07-554244826221" alt="2FA Security" style="width:100%">
-<p align="center">/p>
+<p align="center"></p>
 </td>
 </tr>
 </table>
