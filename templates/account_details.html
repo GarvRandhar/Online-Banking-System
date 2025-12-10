@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Account Details | Banking System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 text-center">
+    <div class="card shadow-lg p-4 animate__animated animate__fadeIn">
+      <h2 class="mb-4">View Account Details</h2>
+      
+      <div class="alert alert-info mb-4" role="alert">
+        <i class="fas fa-shield-alt me-2"></i>
+        For security purposes, your account details are only shown upon request.
+      </div>
+      
+      <form method="POST">
+        <!-- Adding CSRF protection token -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-info w-100">View Details</button>
+      </form>
+      
+      <div class="text-center mt-3">
+        <a href="{{ url_for('dashboard') }}">Return to Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
