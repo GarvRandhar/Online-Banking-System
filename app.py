@@ -34,8 +34,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', '083r08BHHBHBIHVDBHI938')
-app.config['WTF_CSRF_ENABLED'] = False  # Temporarily disable ALL CSRF
+app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key')
+app.config['WTF_CSRF_ENABLED'] = False
 csrf = CSRFProtect(app)
 csrf._exempt_views.add('home')
 
@@ -274,7 +274,7 @@ YourBank Team
     except Exception as e:
         app.logger.error(f"Error sending interest credit email: {str(e)}")
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', 'garvboy21@gmail.com')
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', 'your_email')
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD', 'your_app_password')
 
 mail = Mail(app)
@@ -341,7 +341,7 @@ def send_email(to, subject, body, attachment=None):
     try:
         msg = EmailMessage()
         msg['Subject'] = subject
-        msg['From'] = os.environ.get('MAIL_USERNAME', 'garvboy21@gmail.com')
+        msg['From'] = os.environ.get('MAIL_USERNAME', 'your_email')
         msg['To'] = to
         msg.set_content(body)
 
@@ -353,8 +353,8 @@ def send_email(to, subject, body, attachment=None):
 
         with smtplib.SMTP('smtp.gmail.com', 587) as server:
             server.starttls()
-            server.login(os.environ.get('MAIL_USERNAME', 'garvboy21@gmail.com'), 
-                        os.environ.get('MAIL_PASSWORD', 'kewx sknr pjsk phhw'))
+            server.login(os.environ.get('MAIL_USERNAME', 'your_email'), 
+                        os.environ.get('MAIL_PASSWORD', 'your_password'))
             server.send_message(msg)
             logger.info(f"Email sent to {to}")
     except Exception as e:
@@ -3674,3 +3674,4 @@ if __name__ == '__main__':
     print("\n" + "="*60 + "\n")
     
     app.run(debug=True, host='0.0.0.0', port=5001, use_reloader=False)
+
